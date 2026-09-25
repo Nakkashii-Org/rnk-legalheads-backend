@@ -28,7 +28,7 @@ src/
   models/                   Mongoose models (M): Enquiry, Application, SubscriberToken
   services/                 outside systems and email content
     mail.ts                   MailProvider interface, BrevoProvider, LogProvider (dev)
-    storage.ts                FileStorage interface, S3Storage (R2/S3), LocalStorage (dev)
+    storage.ts                FileStorage interface, CloudinaryStorage, S3Storage (R2/S3), LocalStorage (dev)
     templates.ts              enquiry and application notification emails
   middlewares/              security.ts (origin check, rate limit), upload.ts (resume), error.ts
   validation/               field rules shared in spirit with the frontend forms
@@ -61,8 +61,8 @@ Brevo emails `CONTACT_DESTINATION` with Reply-To set to the visitor → `201` wi
 Brevo fails, the enquiry stays saved with `delivery.status = "failed"` and the visitor gets `503`.
 
 **Careers:** the resume is checked by its actual bytes (PDF, DOC, DOCX) and size, stored in private
-storage (`resumes/YYYY/MM/<reference>.<ext>`), the application is saved with the file's key and
-SHA-256, and Brevo emails `CAREERS_DESTINATION`, with the resume attached unless
+storage (`resumes/YYYY/MM/<reference>.<ext>`), the application is saved with the storage name, the
+file's key and SHA-256, and Brevo emails `CAREERS_DESTINATION`, with the resume attached unless
 `ATTACH_RESUME_TO_EMAIL=false`.
 
 **Newsletter (double opt-in):**
@@ -112,6 +112,19 @@ include message bodies, resumes or tokens.
 4. Create a double opt-in confirmation template → `DOI_TEMPLATE_ID`.
 5. Create the contact attribute `MANAGE_TOKEN` (text).
 
+## Resume storage
+
+| `STORAGE_DRIVER` | Where resumes go | Use |
+|---|---|---|
+| `cloudinary` | Cloudinary, as private **raw** files with delivery type **authenticated**. Nobody can open them from a public link. | **Current choice** (free plan, no card needed). Set `CLOUDINARY_URL`. |
+| `s3` | Cloudflare R2 or AWS S3 private bucket | Later, if preferred. Set the `S3_*` values. |
+| `local` | `.data/uploads` on this computer | Development only; refused in production |
+
+**Cloudinary setup:** Cloudinary Dashboard → **API Keys** → copy the **API environment variable**
+(`cloudinary://<api_key>:<api_secret>@<cloud_name>`) into `CLOUDINARY_URL`, and set
+`STORAGE_DRIVER=cloudinary`. Uploaded resumes appear in **Media Library** under
+`resumes/YYYY/MM/`. Each application records `resume.storage` and `resume.key` (the Cloudinary public id).
+
 ## Local development
 
 ```bash
@@ -128,14 +141,16 @@ and the confirm link is printed, so the whole newsletter flow can be tried local
 ## Tests
 
 ```bash
-npm test          # 37 tests; starts a throwaway in-memory MongoDB (first run downloads it)
+npm test          # 42 tests; starts a throwaway in-memory MongoDB (first run downloads it)
 npm run typecheck
 ```
 
 ## Deploy on Render
 
-- **Web service:** build `npm ci && npm run build`, start `npm start`, health check path `/api/health`.
-- **Environment:** `NODE_ENV=production` and every variable in `.env.example`. Production refuses
-  `MAIL_TRANSPORT=log` and `STORAGE_DRIVER=local`.
+- **Web service:** build `npm ci --include=dev && npm run build` (with `NODE_ENV=production`, a plain
+  `npm ci` skips TypeScript), start `npm start`, health check path `/api/health`. Do not set `PORT`.
+- **Environment:** `NODE_ENV=production`, `MONGODB_URI` (MongoDB Atlas), `PUBLIC_SITE_URL`,
+  `TRUST_PROXY`, the Brevo values, `STORAGE_DRIVER=cloudinary` and `CLOUDINARY_URL`. Production
+  refuses `MAIL_TRANSPORT=log` and `STORAGE_DRIVER=local`, and prints any missing variable at startup.
 - **Frontend service:** set `BACKEND_URL` to this service's URL **before building**. The rewrite is
   fixed at build time.

@@ -25,9 +25,10 @@ export type Config = {
     doiTemplateId: number;
   };
   storage: {
-    driver: "s3" | "local";
+    driver: "s3" | "cloudinary" | "local";
     localDir: string;
     s3: { endpoint?: string; region: string; bucket: string; accessKeyId: string; secretAccessKey: string };
+    cloudinary: { cloudName: string; apiKey: string; apiSecret: string };
   };
 };
 
@@ -62,8 +63,16 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   if (production && transport !== "brevo") problems.push("MAIL_TRANSPORT=log is not allowed in production");
 
   const driver = (env.STORAGE_DRIVER?.trim() || (production ? "s3" : "local")) as Config["storage"]["driver"];
-  if (!["s3", "local"].includes(driver)) problems.push("STORAGE_DRIVER must be s3 or local");
-  if (production && driver !== "s3") problems.push("STORAGE_DRIVER=local is not allowed in production");
+  if (!["s3", "cloudinary", "local"].includes(driver)) problems.push("STORAGE_DRIVER must be s3, cloudinary or local");
+  if (production && driver === "local") problems.push("STORAGE_DRIVER=local is not allowed in production");
+
+  // Cloudinary's standard setting: cloudinary://<api_key>:<api_secret>@<cloud_name>
+  let cloudinary = { cloudName: "", apiKey: "", apiSecret: "" };
+  if (driver === "cloudinary") {
+    const match = /^cloudinary:\/\/([^:@\s]+):([^@\s]+)@([^/\s?]+)\/?$/.exec(env.CLOUDINARY_URL?.trim() ?? "");
+    if (match) cloudinary = { apiKey: match[1]!, apiSecret: match[2]!, cloudName: match[3]! };
+    else problems.push("CLOUDINARY_URL is required, in the form cloudinary://<api_key>:<api_secret>@<cloud_name>");
+  }
 
   let listIds: Record<string, number> = {};
   const rawLists = env.NEWSLETTER_LIST_IDS?.trim();
@@ -115,6 +124,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
         accessKeyId: s3 ? required("S3_ACCESS_KEY_ID") : "",
         secretAccessKey: s3 ? required("S3_SECRET_ACCESS_KEY") : "",
       },
+      cloudinary,
     },
   };
 

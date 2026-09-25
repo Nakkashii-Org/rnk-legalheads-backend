@@ -21,6 +21,8 @@ const applicationSchema = new Schema(
     coverNote: { type: String, maxlength: 1500 },
     consent: { type: Boolean, required: true },
     resume: {
+      /** Where the file lives: cloudinary (raw, authenticated), s3 (private bucket) or local (dev). */
+      storage: { type: String, enum: ["cloudinary", "s3", "local"], required: true },
       key: { type: String, required: true },
       originalName: { type: String, required: true },
       mimeType: { type: String, required: true },

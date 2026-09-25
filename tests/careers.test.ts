@@ -44,6 +44,7 @@ describe("POST /api/careers", () => {
     expect(storage.keys[0]).toMatch(new RegExp(`^resumes/\\d{4}/\\d{2}/${ref}\\.pdf$`));
     const saved = await Application.findOne({ reference: ref });
     expect(saved?.resume?.mimeType).toBe("application/pdf");
+    expect(saved?.resume?.storage).toBe("local");
     expect(saved?.resume?.sha256).toHaveLength(64);
     expect(saved?.delivery?.status).toBe("sent");
 

@@ -49,7 +49,7 @@ export class CareersController {
       organisation: input.organisation || undefined,
       linkedin: input.linkedin || undefined,
       coverNote: input.coverNote || undefined,
-      resume: { key, originalName: file.originalname.slice(0, 200), mimeType: kind.mimeType, size: file.size, sha256: sha256(file.buffer) },
+      resume: { storage: config.storage.driver, key, originalName: file.originalname.slice(0, 200), mimeType: kind.mimeType, size: file.size, sha256: sha256(file.buffer) },
     });
 
     try {
