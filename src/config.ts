@@ -12,6 +12,8 @@ export type Config = {
   trustProxy: number;
   /** Shared with the website's server so draft review mode can read drafts. Empty = drafts never served. */
   contentPreviewSecret: string;
+  /** 32-byte key that encrypts 2-step verification secrets at rest. */
+  mfaEncryptionKey: Buffer;
   mail: {
     transport: "brevo" | "log";
     brevoApiKey: string;
@@ -92,6 +94,14 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const previewSecret = env.CONTENT_PREVIEW_SECRET?.trim() ?? "";
   if (previewSecret && previewSecret.length < 24) problems.push("CONTENT_PREVIEW_SECRET must be at least 24 characters (or left empty)");
 
+  // MFA_ENCRYPTION_KEY: 32 random bytes, base64. Required in production; a fixed key is used in development and tests.
+  let mfaEncryptionKey = Buffer.from("0123456789abcdef0123456789abcdef");
+  const rawMfaKey = env.MFA_ENCRYPTION_KEY?.trim();
+  if (rawMfaKey) {
+    mfaEncryptionKey = Buffer.from(rawMfaKey, "base64");
+    if (mfaEncryptionKey.length !== 32) problems.push("MFA_ENCRYPTION_KEY must be 32 bytes, base64 encoded");
+  } else if (production) problems.push("MFA_ENCRYPTION_KEY is required");
+
   const brevo = transport === "brevo";
   const s3 = driver === "s3";
   const contactDestination = required("CONTACT_DESTINATION", production ? undefined : "contact@rnklegalheads.com");
@@ -107,6 +117,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
       .filter(Boolean),
     trustProxy: integer("TRUST_PROXY", 1),
     contentPreviewSecret: previewSecret,
+    mfaEncryptionKey,
     mail: {
       transport,
       brevoApiKey: brevo ? required("BREVO_API_KEY") : "",

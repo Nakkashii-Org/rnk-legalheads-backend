@@ -127,6 +127,8 @@ export class LogProvider implements MailProvider {
       to: message.to.map((t) => t.email).join(", "),
       subject: message.subject,
       attachments: message.attachments?.map((a) => `${a.name} (${a.content.length} bytes)`).join(", "),
+      // Development only: print CMS invitation links so accounts can be set up without real email.
+      setupLink: message.tags?.includes("cms-invite") ? /https?:\/\/\S+\/admin\/setup\?token=\S+/.exec(message.text)?.[0] : undefined,
     });
     return { messageId: `log-${this.sent.length}` };
   }

@@ -117,3 +117,32 @@ export function applicationEmail(input: {
     tags: ["job-application"],
   };
 }
+
+const ROLE_LABELS: Record<string, string> = { contributor: "Contributor", reviewer: "Legal reviewer", publisher: "Publisher", admin: "Administrator" };
+
+/** CMS invitation: a one-time link to set a password and 2-step verification (valid 72 hours). */
+export function inviteEmail(input: { to: string; name: string; invitedBy: string; link: string; roles: string[] }): EmailMessage {
+  const roles = input.roles.map((r) => ROLE_LABELS[r] ?? r).join(", ");
+  const text = [
+    `Hello ${input.name},`,
+    "",
+    `${input.invitedBy} has invited you to the RNK Legalheads website CMS as: ${roles}.`,
+    "",
+    "Set up your account (link valid for 72 hours, can be used once):",
+    input.link,
+    "",
+    "You will choose a password and connect an authenticator app (Google or Microsoft Authenticator) for 2-step verification.",
+    "If you weren't expecting this, you can ignore this email.",
+  ].join("\n");
+  const html = `<!doctype html><html><body style="margin:0;padding:24px;background:#f7f6f3;font-family:Arial,Helvetica,sans-serif;color:#1e1e1e">
+<table role="presentation" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #ddd9d4">
+<tr><td style="padding:28px 32px;border-top:4px solid #ec3e3f">
+<p style="margin:0 0 20px;font-weight:bold;font-size:18px">RNK Legalheads CMS</p>
+<h1 style="margin:0 0 12px;font-family:Georgia,serif;font-size:22px;font-weight:normal">You've been invited</h1>
+<p style="margin:0 0 8px;font-size:15px;line-height:24px">Hello ${escape(input.name)},</p>
+<p style="margin:0 0 20px;font-size:15px;line-height:24px;color:#605f5c">${escape(input.invitedBy)} has invited you to the website CMS as <strong style="color:#1e1e1e">${escape(roles)}</strong>.</p>
+<a href="${escape(input.link)}" style="display:inline-block;background:#1e1e1e;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:14px 24px">Set up my account</a>
+<p style="margin:20px 0 0;font-size:13px;line-height:20px;color:#605f5c">The link works once and expires in 72 hours. You'll choose a password and connect an authenticator app (Google or Microsoft Authenticator) for 2-step verification. If you weren't expecting this, ignore this email.</p>
+</td></tr></table></body></html>`;
+  return { to: [{ email: input.to, name: input.name }], subject: "Your invitation to the RNK Legalheads CMS", text, html, tags: ["cms-invite"] };
+}

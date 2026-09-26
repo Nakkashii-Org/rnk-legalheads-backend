@@ -2,6 +2,7 @@ import { Router } from "express";
 import { HealthController } from "../controllers/health.controller.js";
 import { requireOrigin } from "../middlewares/security.js";
 import type { Deps } from "../types.js";
+import { adminRoutes } from "./admin.routes.js";
 import { careersRoutes } from "./careers.routes.js";
 import { contentRoutes } from "./content.routes.js";
 import { contactRoutes } from "./contact.routes.js";
@@ -17,5 +18,7 @@ export function apiRoutes(deps: Deps) {
   router.use(contactRoutes(deps));
   router.use(careersRoutes(deps));
   router.use(newsletterRoutes(deps));
+  // The CMS (after the origin check, so every change must come from our own website).
+  router.use(adminRoutes(deps));
   return router;
 }

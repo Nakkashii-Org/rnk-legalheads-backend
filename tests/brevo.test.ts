@@ -80,7 +80,7 @@ describe("config", () => {
       loadConfig({ NODE_ENV: "production" });
     } catch (error) {
       const message = (error as Error).message;
-      for (const name of ["PUBLIC_SITE_URL", "MONGODB_URI", "BREVO_API_KEY", "MAIL_FROM_EMAIL", "NEWSLETTER_LIST_IDS", "DOI_TEMPLATE_ID", "S3_BUCKET", "CONTACT_DESTINATION"])
+      for (const name of ["PUBLIC_SITE_URL", "MONGODB_URI", "BREVO_API_KEY", "MAIL_FROM_EMAIL", "NEWSLETTER_LIST_IDS", "DOI_TEMPLATE_ID", "S3_BUCKET", "CONTACT_DESTINATION", "MFA_ENCRYPTION_KEY"])
         expect(message).toContain(name);
       return;
     }

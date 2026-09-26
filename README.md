@@ -143,6 +143,40 @@ To import into Atlas from your computer, point `MONGODB_URI` at Atlas for that o
 `SHOW_DRAFT_CONTENT=true npx tsx scripts/export-content.ts ../rnk-legalhead-backend/seed/content.json`.
 Everything is imported as a draft (guide p.150: approve record by record).
 
+## CMS sign-in, users and audit log (phase B)
+
+**Accounts:** named accounts only; there is no public sign-up. Roles are Contributor, Legal reviewer,
+Publisher and Administrator, and the server checks them on every request.
+
+| Endpoint | Who | What |
+|---|---|---|
+| `POST /api/admin/auth/login` `{email, password}` | anyone | `{step:"mfa"}`, or `{step:"enroll", qr, secret}` after a 2-step reset · `401` · `429` locked |
+| `POST /api/admin/auth/mfa` `{code}` | after the password | Full session cookie `rnk_admin` (httpOnly, SameSite=Lax, Secure in production) |
+| `POST /api/admin/auth/logout`, `/logout-all` | signed in | Ends this session / every session of the user |
+| `GET /api/admin/auth/me` | signed in | The signed-in user and roles |
+| `GET /api/admin/setup?token=`, `POST /api/admin/setup/password`, `/setup/verify` | invitation link | Choose a password, scan the QR code, confirm the first code, and you're signed in |
+| `GET/POST /api/admin/users`, `PATCH /users/:id`, `POST /users/:id/reset-mfa`, `/resend-invite` | Administrator | List, invite (by email through Brevo), change roles, disable or enable, reset 2-step, resend invitation |
+| `GET /api/admin/audit?page=` | Administrator | Audit log, newest first |
+
+**Security:**
+- Passwords are Argon2id hashes: at least 12 characters, not common, not containing the email.
+- 2-step verification uses standard authenticator codes (TOTP). The secret is encrypted with `MFA_ENCRYPTION_KEY`, and a code can't be used twice.
+- The account locks for 15 minutes after 5 wrong passwords; a sign-in attempt ends after 5 wrong codes.
+- Sessions last at most 8 hours and end after 2 hours idle. Disabling a user signs them out everywhere at once.
+- There must always be at least one active Administrator.
+- Wrong email and wrong password give the same answer.
+- The audit log never holds passwords, codes or tokens.
+
+**Create the first Administrator.** A developer does this once per database, because there is no public sign-up and an empty database has nobody who can invite. It's also the recovery route if every Administrator is locked out. The developer never sees the password: the command only sends the setup link, and the Administrator chooses their own password and connects their own phone. After that, Administrators invite everyone else from **Users and roles** in the CMS, so no developer is needed for normal work.
+
+```bash
+npm run create-admin -- --email you@example.com --name "Your Name"
+```
+
+This prints a one-time setup link (valid 72 hours) and, when Brevo is configured, emails it. With
+`MAIL_TRANSPORT=log`, invitation links are printed in the server log. For Atlas, run it from your
+computer with `MONGODB_URI` pointing at Atlas, the same way as `npm run seed`.
+
 ## Resume storage
 
 | `STORAGE_DRIVER` | Where resumes go | Use |
@@ -172,7 +206,7 @@ and the confirm link is printed, so the whole newsletter flow can be tried local
 ## Tests
 
 ```bash
-npm test          # 52 tests; starts a throwaway in-memory MongoDB (first run downloads it)
+npm test          # 65 tests; starts a throwaway in-memory MongoDB (first run downloads it)
 npm run typecheck
 ```
 
