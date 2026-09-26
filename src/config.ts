@@ -10,6 +10,8 @@ export type Config = {
   publicSiteUrl: string;
   allowedOrigins: string[];
   trustProxy: number;
+  /** Shared with the website's server so draft review mode can read drafts. Empty = drafts never served. */
+  contentPreviewSecret: string;
   mail: {
     transport: "brevo" | "log";
     brevoApiKey: string;
@@ -87,6 +89,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   } else if (transport === "brevo") problems.push("NEWSLETTER_LIST_IDS is required");
   else listIds = Object.fromEntries(NEWSLETTER_TOPIC_IDS.map((t, i) => [t, i + 1]));
 
+  const previewSecret = env.CONTENT_PREVIEW_SECRET?.trim() ?? "";
+  if (previewSecret && previewSecret.length < 24) problems.push("CONTENT_PREVIEW_SECRET must be at least 24 characters (or left empty)");
+
   const brevo = transport === "brevo";
   const s3 = driver === "s3";
   const contactDestination = required("CONTACT_DESTINATION", production ? undefined : "contact@rnklegalheads.com");
@@ -101,6 +106,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
       .map((o) => o.trim().replace(/\/+$/, ""))
       .filter(Boolean),
     trustProxy: integer("TRUST_PROXY", 1),
+    contentPreviewSecret: previewSecret,
     mail: {
       transport,
       brevoApiKey: brevo ? required("BREVO_API_KEY") : "",

@@ -1,0 +1,2184 @@
+{
+  "site": {
+    "name": "RNK Legalheads",
+    "established": 2024,
+    "statement": "A full-service law firm. Established in 2024.",
+    "disclaimer": "This website provides general information. It is not legal advice and does not create a lawyer-client relationship.",
+    "legalEntity": "RNK Legalheads LLP",
+    "contactDetails": {
+      "address": "RNK Legalheads LLP\nThird Floor, Plot Number 94, Pocket 10\nSector 13, Dwarka\nNew Delhi 110078",
+      "email": "contact@rnklegalheads.com",
+      "mapQuery": "Plot Number 94, Pocket 10, Sector 13, Dwarka, New Delhi 110078"
+    }
+  },
+  "services": [
+    {
+      "id": "S01",
+      "slug": "corporate-commercial",
+      "title": "Corporate & Commercial",
+      "group": "business",
+      "summary": "Business formation, governance, commercial agreements and legal support for day-to-day operations.",
+      "approved": false
+    },
+    {
+      "id": "S02",
+      "slug": "mergers-acquisitions",
+      "title": "Mergers & Acquisitions",
+      "group": "business",
+      "summary": "Acquisitions, disposals, joint ventures and transaction documentation, from diligence through completion.",
+      "approved": false
+    },
+    {
+      "id": "S03",
+      "slug": "private-equity-venture-capital-startups",
+      "title": "Private Equity, Venture Capital & Startups",
+      "group": "business",
+      "summary": "Founder arrangements, fundraising, investment documentation and legal support through business growth.",
+      "approved": false
+    },
+    {
+      "id": "S04",
+      "slug": "banking-finance",
+      "title": "Banking & Finance",
+      "group": "business",
+      "summary": "Lending, borrowing, security documents, project finance and financing-related advisory.",
+      "approved": false
+    },
+    {
+      "id": "S05",
+      "slug": "capital-markets-securities",
+      "title": "Capital Markets & Securities",
+      "group": "business",
+      "summary": "Securities transactions, disclosure obligations, listed-company advisory and enforcement matters.",
+      "approved": false
+    },
+    {
+      "id": "S06",
+      "slug": "investment-funds",
+      "title": "Investment Funds & Asset Management",
+      "group": "business",
+      "summary": "Fund structures, investment documents, manager arrangements and legal compliance support.",
+      "approved": false
+    },
+    {
+      "id": "S07",
+      "slug": "competition-antitrust",
+      "title": "Competition & Antitrust",
+      "group": "business",
+      "summary": "Merger-control advice, competition assessments, investigations and compliance programmes.",
+      "approved": false
+    },
+    {
+      "id": "S08",
+      "slug": "foreign-investment-exchange-control",
+      "title": "Foreign Investment & Exchange Control",
+      "group": "business",
+      "summary": "Inbound and outbound investment, cross-border transactions and exchange-control compliance.",
+      "approved": false
+    },
+    {
+      "id": "S09",
+      "slug": "civil-commercial-litigation",
+      "title": "Civil & Commercial Litigation",
+      "group": "disputes",
+      "summary": "Civil suits, commercial claims, interim applications, appeals and enforcement proceedings.",
+      "approved": false
+    },
+    {
+      "id": "S10",
+      "slug": "arbitration",
+      "title": "Arbitration",
+      "group": "disputes",
+      "summary": "Arbitration agreements, domestic and international proceedings, interim relief and award-related litigation.",
+      "approved": false
+    },
+    {
+      "id": "S11",
+      "slug": "mediation-settlement",
+      "title": "Mediation & Settlement",
+      "group": "disputes",
+      "summary": "Negotiated resolution, mediation preparation and the documentation of settlement terms.",
+      "approved": false
+    },
+    {
+      "id": "S12",
+      "slug": "criminal-defence",
+      "title": "Criminal Defence",
+      "group": "disputes",
+      "summary": "Criminal proceedings, bail applications, trial preparation, appeals and related legal representation.",
+      "approved": false
+    },
+    {
+      "id": "S13",
+      "slug": "white-collar-investigations",
+      "title": "White-Collar Crime & Investigations",
+      "group": "disputes",
+      "summary": "Internal investigations, corporate misconduct, financial allegations and regulatory investigations.",
+      "approved": false
+    },
+    {
+      "id": "S14",
+      "slug": "sarfaesi-drt-debt-recovery",
+      "title": "SARFAESI, DRT & Debt Recovery",
+      "group": "disputes",
+      "summary": "Secured-credit enforcement, borrower remedies, DRT and DRAT proceedings, and debt-recovery disputes.",
+      "approved": false
+    },
+    {
+      "id": "S15",
+      "slug": "insolvency-restructuring",
+      "title": "Insolvency & Restructuring",
+      "group": "disputes",
+      "summary": "Financial distress, creditor and debtor advisory, resolution processes and insolvency-related disputes.",
+      "approved": false
+    },
+    {
+      "id": "S16",
+      "slug": "litigation-strategy-portfolio",
+      "title": "Litigation Strategy & Portfolio Management",
+      "group": "disputes",
+      "summary": "Coordinated oversight of multiple disputes, reporting, external counsel and settlement strategy.",
+      "approved": false
+    },
+    {
+      "id": "S17",
+      "slug": "litigation-funding-advisory",
+      "title": "Litigation Funding Advisory",
+      "group": "disputes",
+      "summary": "Legal review of third-party funding arrangements, subject to applicable professional and jurisdictional restrictions.",
+      "approved": false,
+      "hold": true
+    },
+    {
+      "id": "S18",
+      "slug": "direct-international-tax",
+      "title": "Direct & International Tax",
+      "group": "tax",
+      "summary": "Tax advice on business structures, transactions, cross-border matters and private-client arrangements.",
+      "approved": false
+    },
+    {
+      "id": "S19",
+      "slug": "gst-indirect-tax",
+      "title": "GST & Indirect Tax",
+      "group": "tax",
+      "summary": "GST and indirect-tax advice, transaction review, notices, classification and credit-related issues.",
+      "approved": false
+    },
+    {
+      "id": "S20",
+      "slug": "customs-international-trade",
+      "title": "Customs & International Trade",
+      "group": "tax",
+      "summary": "Import and export transactions, customs disputes, trade remedies and cross-border compliance.",
+      "approved": false
+    },
+    {
+      "id": "S21",
+      "slug": "tax-litigation-investigations",
+      "title": "Tax Litigation & Investigations",
+      "group": "tax",
+      "summary": "Tax notices, investigations, assessment disputes, appeals and proceedings before relevant fora.",
+      "approved": false
+    },
+    {
+      "id": "S22",
+      "slug": "real-estate-rera",
+      "title": "Real Estate & RERA",
+      "group": "property",
+      "summary": "Title review, property transactions, leasing, development arrangements and real-estate disputes.",
+      "approved": false
+    },
+    {
+      "id": "S23",
+      "slug": "construction-infrastructure",
+      "title": "Construction & Infrastructure",
+      "group": "property",
+      "summary": "Project contracts, procurement, claims, delays, payment disputes and infrastructure transactions.",
+      "approved": false
+    },
+    {
+      "id": "S24",
+      "slug": "energy-natural-resources",
+      "title": "Energy & Natural Resources",
+      "group": "property",
+      "summary": "Energy projects, commercial arrangements, resource transactions and regulatory disputes.",
+      "approved": false
+    },
+    {
+      "id": "S25",
+      "slug": "environment-climate",
+      "title": "Environment & Climate",
+      "group": "property",
+      "summary": "Environmental permissions, compliance reviews, project risk and environmental proceedings.",
+      "approved": false
+    },
+    {
+      "id": "S26",
+      "slug": "intellectual-property",
+      "title": "Intellectual Property",
+      "group": "ip",
+      "summary": "Patents, trade marks, designs, copyright, ownership, licensing and portfolio management.",
+      "approved": false
+    },
+    {
+      "id": "S27",
+      "slug": "ip-disputes-enforcement",
+      "title": "IP Disputes & Enforcement",
+      "group": "ip",
+      "summary": "Infringement, passing off, validity, trade-secret disputes and rights-specific enforcement.",
+      "approved": false
+    },
+    {
+      "id": "S28",
+      "slug": "technology-data-cybersecurity",
+      "title": "Technology, Data & Cybersecurity",
+      "group": "ip",
+      "summary": "Technology contracts, data protection, digital products, cybersecurity response and platform issues.",
+      "approved": false
+    },
+    {
+      "id": "S29",
+      "slug": "media-entertainment-sports",
+      "title": "Media, Entertainment & Sports",
+      "group": "ip",
+      "summary": "Content, production, licensing, advertising, talent, sports agreements and related disputes.",
+      "approved": false
+    },
+    {
+      "id": "S30",
+      "slug": "employment-labour-posh",
+      "title": "Employment, Labour & POSH",
+      "group": "people",
+      "summary": "Employment documents, workplace policies, labour issues, investigations and employment disputes.",
+      "approved": false
+    },
+    {
+      "id": "S31",
+      "slug": "family-matrimonial",
+      "title": "Family & Matrimonial",
+      "group": "people",
+      "summary": "Matrimonial proceedings, family arrangements, maintenance, parenting issues and negotiated resolution.",
+      "approved": false
+    },
+    {
+      "id": "S32",
+      "slug": "private-client-succession",
+      "title": "Private Client, Wills & Succession",
+      "group": "people",
+      "summary": "Wills, estate planning, succession, family businesses and private-wealth legal arrangements.",
+      "approved": false
+    },
+    {
+      "id": "S33",
+      "slug": "consumer-product-liability",
+      "title": "Consumer Protection & Product Liability",
+      "group": "people",
+      "summary": "Consumer claims, product and service disputes, e-commerce issues and business compliance.",
+      "approved": false
+    },
+    {
+      "id": "S34",
+      "slug": "regulatory-public-law",
+      "title": "Regulatory & Public Law",
+      "group": "regulated",
+      "summary": "Regulatory advice, administrative decisions, statutory challenges and constitutional remedies.",
+      "approved": false
+    },
+    {
+      "id": "S35",
+      "slug": "healthcare-life-sciences",
+      "title": "Healthcare, Pharmaceuticals & Life Sciences",
+      "group": "regulated",
+      "summary": "Sector regulation, transactions, commercial agreements, IP and healthcare-related disputes.",
+      "approved": false
+    },
+    {
+      "id": "S36",
+      "slug": "insurance",
+      "title": "Insurance",
+      "group": "regulated",
+      "summary": "Insurance contracts, coverage disputes, claims, regulatory matters and insurance transactions.",
+      "approved": false
+    },
+    {
+      "id": "S37",
+      "slug": "transport-maritime-aviation",
+      "title": "Transport, Maritime & Aviation",
+      "group": "regulated",
+      "summary": "Transport contracts, logistics, maritime and aviation matters, claims and sector regulation.",
+      "approved": false
+    },
+    {
+      "id": "S38",
+      "slug": "education-trusts-nonprofits",
+      "title": "Education, Trusts & Non-profits",
+      "group": "regulated",
+      "summary": "Educational institutions, charitable structures, governance, commercial agreements and regulatory issues.",
+      "approved": false
+    },
+    {
+      "id": "S39",
+      "slug": "immigration-global-mobility",
+      "title": "Immigration & Global Mobility",
+      "group": "regulated",
+      "summary": "Indian immigration and mobility advice, documentation and coordination of overseas legal requirements.",
+      "approved": false
+    },
+    {
+      "id": "S40",
+      "slug": "government-contracts-procurement",
+      "title": "Government Contracts & Procurement",
+      "group": "regulated",
+      "summary": "Tender documents, public contracts, bid-related disputes and project implementation.",
+      "approved": false
+    }
+  ],
+  "serviceDetails": {
+    "S01": {
+      "overview": "We advise businesses on their structure, contracts and corporate responsibilities. Our work covers the legal arrangements needed to establish a business, manage relationships and carry out its operations. We help clients understand the obligations they take on and document decisions in terms that can be used in practice.",
+      "scope": [
+        {
+          "title": "Business formation",
+          "text": "Company and LLP formation, ownership arrangements and the legal structure for proposed business activities."
+        },
+        {
+          "title": "Commercial contracts",
+          "text": "Supply, distribution, services, procurement, agency, franchise and other trading agreements."
+        },
+        {
+          "title": "Corporate governance",
+          "text": "Board and shareholder processes, delegated authority, internal policies and governance documentation."
+        },
+        {
+          "title": "Business reorganisations",
+          "text": "Internal reorganisations, transfers of business and coordination of corporate, employment and tax issues."
+        },
+        {
+          "title": "Ongoing advisory",
+          "text": "Contract reviews, routine corporate questions and legal support under an agreed scope of work."
+        },
+        {
+          "title": "Shareholder arrangements",
+          "text": "Rights, reserved matters, transfers, management participation and arrangements for resolving differences."
+        }
+      ],
+      "related": [
+        "S02",
+        "S30",
+        "S18"
+      ]
+    },
+    "S02": {
+      "overview": "We advise buyers, sellers and business owners on acquisitions, disposals and combinations. The work begins with the structure of the proposed transaction and the issues that may affect it. We then support diligence, negotiation and completion, working with other advisers where financial, regulatory or overseas matters require their input.",
+      "scope": [
+        {
+          "title": "Transaction structuring",
+          "text": "Share purchases, business transfers, asset acquisitions, joint ventures and proposed combinations."
+        },
+        {
+          "title": "Legal due diligence",
+          "text": "Review of corporate records, material agreements, licences, employment, property and identified legal liabilities."
+        },
+        {
+          "title": "Definitive documents",
+          "text": "Purchase agreements, disclosure documents, shareholders agreements and supporting transaction instruments."
+        },
+        {
+          "title": "Negotiation support",
+          "text": "Allocation of risk through warranties, indemnities, conditions, covenants and completion arrangements."
+        },
+        {
+          "title": "Regulatory coordination",
+          "text": "Identification of relevant approval requirements and coordination with competition, tax and sector advisers."
+        },
+        {
+          "title": "Completion and integration",
+          "text": "Closing checklists, transfer documents and legal work required for the agreed integration plan."
+        }
+      ],
+      "related": [
+        "S01",
+        "S07",
+        "S08"
+      ]
+    },
+    "S03": {
+      "overview": "We work with founders, growing businesses and investors on the legal arrangements behind investment and ownership. Our advice addresses the proposed funding terms, management rights and the steps needed to complete an investment. We also help businesses put their contracts, intellectual property and employment arrangements in order as they grow.",
+      "scope": [
+        {
+          "title": "Founder arrangements",
+          "text": "Ownership, roles, vesting, decision-making and departure provisions for founders and early teams."
+        },
+        {
+          "title": "Fundraising documents",
+          "text": "Term sheets, subscription agreements, shareholders agreements and investment-related disclosures."
+        },
+        {
+          "title": "Investor diligence",
+          "text": "Review of ownership, contracts, intellectual property, compliance and other material investment issues."
+        },
+        {
+          "title": "Employee incentives",
+          "text": "Legal documentation for share-based incentives, with tax and implementation advice where required."
+        },
+        {
+          "title": "Portfolio support",
+          "text": "Follow-on investments, governance matters, commercial contracting and changes in ownership."
+        },
+        {
+          "title": "Exits and transfers",
+          "text": "Secondary transactions, buyouts, negotiated exits and related transfer documentation."
+        }
+      ],
+      "related": [
+        "S01",
+        "S26",
+        "S06"
+      ]
+    },
+    "S04": {
+      "overview": "We advise on the legal terms of financing arrangements and the rights of the parties involved. Our work includes the preparation and review of finance and security documents, transaction diligence and the steps required for completion. Where repayment or enforcement issues arise, the finance and disputes workstreams are considered together.",
+      "scope": [
+        {
+          "title": "Lending transactions",
+          "text": "Bilateral, syndicated and structured lending documents for agreed financing arrangements."
+        },
+        {
+          "title": "Security and guarantees",
+          "text": "Security packages, guarantees, priority arrangements and related perfection requirements."
+        },
+        {
+          "title": "Borrower advisory",
+          "text": "Review of covenants, drawdown conditions, repayment obligations and proposed refinancing."
+        },
+        {
+          "title": "Project finance",
+          "text": "Financing documentation and legal interfaces with project contracts, land and approvals."
+        },
+        {
+          "title": "Distressed finance",
+          "text": "Amendments, standstill arrangements, restructuring discussions and agreed settlement documentation."
+        },
+        {
+          "title": "Financial regulation",
+          "text": "Legal review of relevant financing restrictions and coordination of regulatory requirements."
+        }
+      ],
+      "related": [
+        "S14",
+        "S15",
+        "S23"
+      ]
+    },
+    "S05": {
+      "overview": "We advise on the legal and regulatory issues involved in securities transactions and participation in capital markets. The scope may include diligence, offer-related documents, corporate approvals and continuing obligations. Transaction roles and regulatory filings are agreed with the client and coordinated with the registered intermediaries involved.",
+      "scope": [
+        {
+          "title": "Capital raising",
+          "text": "Legal support for proposed equity and debt issuances and related transaction structures."
+        },
+        {
+          "title": "Disclosure review",
+          "text": "Review of material legal disclosures, risk descriptions and supporting corporate information."
+        },
+        {
+          "title": "Listed-company obligations",
+          "text": "Advice on governance, disclosures, related-party matters and securities-law responsibilities."
+        },
+        {
+          "title": "Securities documentation",
+          "text": "Subscription, placement and other agreements within the agreed transaction scope."
+        },
+        {
+          "title": "Regulatory proceedings",
+          "text": "Responses, representations and legal support in securities-related proceedings."
+        },
+        {
+          "title": "Transaction coordination",
+          "text": "Work with merchant bankers, trustees and other authorised intermediaries on responsibilities and deliverables."
+        }
+      ],
+      "related": [
+        "S04",
+        "S01",
+        "S34"
+      ]
+    },
+    "S06": {
+      "overview": "We advise sponsors, managers and investors on the legal arrangements for investment funds and asset management. Our work addresses structure, governance, investment terms and the rights of participants. Tax, regulatory and overseas elements are reviewed with the relevant specialists so that responsibilities are clear before the proposed arrangement is implemented.",
+      "scope": [
+        {
+          "title": "Fund structures",
+          "text": "Legal structuring of proposed funds, vehicles and sponsor or manager arrangements."
+        },
+        {
+          "title": "Fund documentation",
+          "text": "Offering documents, contribution agreements, management terms and investor disclosures."
+        },
+        {
+          "title": "Investor arrangements",
+          "text": "Side letters, investor rights, governance protections and transfer provisions."
+        },
+        {
+          "title": "Regulatory requirements",
+          "text": "Advice on relevant registrations, operating conditions and reporting obligations."
+        },
+        {
+          "title": "Portfolio transactions",
+          "text": "Legal support for investments, disposals, reorganisations and related documentation."
+        },
+        {
+          "title": "Manager governance",
+          "text": "Conflicts processes, internal policies, delegation arrangements and changes to management."
+        }
+      ],
+      "related": [
+        "S03",
+        "S05",
+        "S18"
+      ]
+    },
+    "S07": {
+      "overview": "We advise businesses on competition issues arising from transactions, commercial arrangements and market conduct. The work may involve assessing an agreement, reviewing a proposed combination or responding to an investigation. Advice is based on the relevant market, the conduct in question and the applicable legal framework.",
+      "scope": [
+        {
+          "title": "Merger control",
+          "text": "Assessment of notification requirements and legal support for transaction-related filings."
+        },
+        {
+          "title": "Commercial arrangements",
+          "text": "Competition review of distribution, supply, exclusivity and collaboration agreements."
+        },
+        {
+          "title": "Conduct advisory",
+          "text": "Advice on pricing practices, information exchange, market behaviour and compliance concerns."
+        },
+        {
+          "title": "Investigations",
+          "text": "Support with information requests, evidence review, responses and representation."
+        },
+        {
+          "title": "Appeals and disputes",
+          "text": "Legal strategy for competition proceedings and related appellate remedies."
+        },
+        {
+          "title": "Compliance programmes",
+          "text": "Practical policies, training and internal review processes for relevant business teams."
+        }
+      ],
+      "related": [
+        "S02",
+        "S09",
+        "S01"
+      ]
+    },
+    "S08": {
+      "overview": "We advise on the Indian legal requirements affecting cross-border investment and financial flows. Our work covers the proposed route, transaction documents and the approvals or reporting steps relevant to the arrangement. Foreign-law questions are coordinated with appropriately qualified counsel in the relevant jurisdiction.",
+      "scope": [
+        {
+          "title": "Inbound investment",
+          "text": "Assessment of investment routes, sector conditions and proposed ownership structures."
+        },
+        {
+          "title": "Outbound investment",
+          "text": "Legal review of overseas investment structures and relevant Indian compliance requirements."
+        },
+        {
+          "title": "Cross-border funding",
+          "text": "Advice on permitted financing routes, documentation and applicable restrictions."
+        },
+        {
+          "title": "Reporting and approvals",
+          "text": "Support with identifying and preparing relevant applications and transaction-related reporting."
+        },
+        {
+          "title": "Remittances and transfers",
+          "text": "Legal review of cross-border payments, transfers and repatriation questions."
+        },
+        {
+          "title": "Compliance remediation",
+          "text": "Assessment of historical issues, corrective steps and available regularisation processes."
+        }
+      ],
+      "related": [
+        "S02",
+        "S04",
+        "S18"
+      ]
+    },
+    "S09": {
+      "overview": "We represent clients in civil and commercial disputes and advise on the steps available before proceedings begin. Our work includes reviewing the facts and documents, identifying the appropriate forum and preparing the claim or defence. We consider interim relief, settlement and enforcement as part of the matter, rather than as separate afterthoughts.",
+      "scope": [
+        {
+          "title": "Commercial claims",
+          "text": "Contract, payment, shareholder and business-relationship disputes, including defence of third-party claims."
+        },
+        {
+          "title": "Civil proceedings",
+          "text": "Property, injunction, declaratory, damages and other civil matters within the agreed scope."
+        },
+        {
+          "title": "Interim applications",
+          "text": "Assessment and preparation of applications for urgent or protective relief where legally available."
+        },
+        {
+          "title": "Evidence and hearings",
+          "text": "Pleadings, document review, witness preparation and conduct of proceedings with the required counsel."
+        },
+        {
+          "title": "Appeals and review",
+          "text": "Advice on available challenges, appellate strategy and procedural requirements."
+        },
+        {
+          "title": "Execution and recovery",
+          "text": "Enforcement of orders and decrees, asset-related proceedings and negotiated resolution."
+        }
+      ],
+      "related": [
+        "S10",
+        "S11",
+        "S16"
+      ]
+    },
+    "S10": {
+      "overview": "We advise and represent parties in arbitration arising from commercial and contractual relationships. The work may begin with the dispute clause or with a dispute that has already developed. We address the procedure, evidence and relief sought, and coordinate related court proceedings where they are required.",
+      "scope": [
+        {
+          "title": "Dispute clauses",
+          "text": "Drafting and review of arbitration clauses, including seat, institution and appointment arrangements."
+        },
+        {
+          "title": "Case assessment",
+          "text": "Review of the agreement, claims, defences, evidence and procedural options."
+        },
+        {
+          "title": "Arbitral proceedings",
+          "text": "Notices, pleadings, document production, witness and expert evidence, and hearing preparation."
+        },
+        {
+          "title": "Interim protection",
+          "text": "Advice on protective measures before the tribunal or the appropriate court."
+        },
+        {
+          "title": "Awards and challenges",
+          "text": "Assessment of award-related remedies, challenge proceedings and enforcement requirements."
+        },
+        {
+          "title": "Cross-border coordination",
+          "text": "Coordination with local counsel on foreign law, overseas proceedings and enforcement strategy."
+        }
+      ],
+      "related": [
+        "S09",
+        "S23",
+        "S17"
+      ]
+    },
+    "S11": {
+      "overview": "We help clients assess and pursue negotiated resolution where it is appropriate to the dispute. This may involve direct discussions, mediation or another agreed process. Our role is to prepare the legal position, identify the terms that need to be resolved and document an agreement that accurately records the parties' understanding.",
+      "scope": [
+        {
+          "title": "Settlement assessment",
+          "text": "Review of the dispute, available options and issues that may affect negotiation."
+        },
+        {
+          "title": "Mediation preparation",
+          "text": "Position papers, supporting records and preparation for participation in mediation."
+        },
+        {
+          "title": "Negotiation support",
+          "text": "Advice during discussions on terms, concessions, releases and ongoing obligations."
+        },
+        {
+          "title": "Settlement agreements",
+          "text": "Drafting of settlement terms, payment arrangements, releases and compliance provisions."
+        },
+        {
+          "title": "Court-related settlement",
+          "text": "Coordination with pending proceedings and the steps needed to record a lawful resolution."
+        },
+        {
+          "title": "Implementation",
+          "text": "Follow-through on agreed documentation, withdrawals and performance requirements."
+        }
+      ],
+      "related": [
+        "S10",
+        "S09",
+        "S31"
+      ]
+    },
+    "S12": {
+      "overview": "We advise and represent individuals and organisations in criminal matters. Our work includes understanding the allegations, reviewing the available material and advising on the stage of the proceedings. We explain the legal options and procedural requirements, while maintaining appropriate confidentiality and care in handling sensitive information.",
+      "scope": [
+        {
+          "title": "Investigation-stage advice",
+          "text": "Legal advice on notices, questioning, searches and requests for information."
+        },
+        {
+          "title": "Bail and protective applications",
+          "text": "Assessment and preparation of applications where available under the applicable law."
+        },
+        {
+          "title": "Complaints and defence",
+          "text": "Advice on complaints, allegations and the preparation of a defence."
+        },
+        {
+          "title": "Trial preparation",
+          "text": "Review of evidence, witnesses, pleadings and the conduct of criminal proceedings."
+        },
+        {
+          "title": "Appeals and revisions",
+          "text": "Advice and representation in available appellate, revisional and related proceedings."
+        },
+        {
+          "title": "Connected civil issues",
+          "text": "Coordination with civil, employment, regulatory or financial matters arising from the same facts."
+        }
+      ],
+      "related": [
+        "S13",
+        "S09",
+        "S34"
+      ]
+    },
+    "S13": {
+      "overview": "We advise businesses and individuals on allegations of corporate and financial misconduct. The work may involve an internal review, a regulatory inquiry or connected criminal proceedings. We define the scope of the investigation, consider evidence and confidentiality issues, and help the client assess its legal obligations and response.",
+      "scope": [
+        {
+          "title": "Internal investigations",
+          "text": "Scoping, document review, interviews and reporting on identified concerns."
+        },
+        {
+          "title": "Financial misconduct",
+          "text": "Advice on fraud, bribery, corruption, money-laundering and related allegations."
+        },
+        {
+          "title": "Regulatory inquiries",
+          "text": "Preparation for notices, information requests and interactions with investigating authorities."
+        },
+        {
+          "title": "Evidence preservation",
+          "text": "Lawful preservation of records, confidentiality controls and coordination with technical specialists."
+        },
+        {
+          "title": "Management advice",
+          "text": "Advice to boards and management on response, remediation and relevant legal obligations."
+        },
+        {
+          "title": "Related proceedings",
+          "text": "Coordination of criminal defence, civil claims, employment issues and other connected matters."
+        }
+      ],
+      "related": [
+        "S12",
+        "S28",
+        "S30"
+      ]
+    },
+    "S14": {
+      "overview": "We advise lenders, borrowers, guarantors and other affected parties on secured-credit and recovery matters, subject to conflict checks. Our work addresses the relevant notices, security documents, enforcement measures and available remedies. The legal route depends on the debt, the security, the parties involved and the stage of the matter.",
+      "scope": [
+        {
+          "title": "Security and notices",
+          "text": "Review of finance documents, security interests, demand notices and proposed responses."
+        },
+        {
+          "title": "Enforcement measures",
+          "text": "Advice on possession, sale and other recovery steps under the applicable framework."
+        },
+        {
+          "title": "DRT and DRAT matters",
+          "text": "Preparation and conduct of applications, objections and appeals before the appropriate tribunal."
+        },
+        {
+          "title": "Borrower and guarantor issues",
+          "text": "Assessment of liability, procedural concerns and available relief on the facts."
+        },
+        {
+          "title": "Settlement and restructuring",
+          "text": "Negotiated repayment, one-time settlements and documentation of agreed arrangements."
+        },
+        {
+          "title": "Parallel proceedings",
+          "text": "Coordination with civil litigation, arbitration, insolvency and other related proceedings."
+        }
+      ],
+      "related": [
+        "S04",
+        "S15",
+        "S09"
+      ]
+    },
+    "S15": {
+      "overview": "We advise stakeholders dealing with financial distress and restructuring. The work may include a negotiated arrangement, participation in a formal process or a dispute concerning rights and obligations. We consider the position of the client alongside the applicable process, available information and commercial circumstances.",
+      "scope": [
+        {
+          "title": "Early-stage restructuring",
+          "text": "Assessment of legal options for stressed businesses and proposed creditor arrangements."
+        },
+        {
+          "title": "Creditor and debtor advice",
+          "text": "Legal support on claims, obligations and participation in relevant proceedings."
+        },
+        {
+          "title": "Resolution processes",
+          "text": "Advice on submissions, process documents, resolution proposals and stakeholder rights."
+        },
+        {
+          "title": "Distressed acquisitions",
+          "text": "Legal diligence and documentation for the acquisition of distressed assets or businesses."
+        },
+        {
+          "title": "Insolvency disputes",
+          "text": "Representation in applications, challenges, appeals and connected recovery proceedings."
+        },
+        {
+          "title": "Implementation",
+          "text": "Documentation and legal support for approved arrangements and post-resolution steps."
+        }
+      ],
+      "related": [
+        "S14",
+        "S04",
+        "S02"
+      ]
+    },
+    "S16": {
+      "overview": "We help businesses organise and manage a portfolio of legal disputes. The work brings individual matters into a consistent reporting and decision-making process, while preserving the requirements of each case. We agree responsibilities with the client and coordinate with authorised local counsel where proceedings require their involvement.",
+      "scope": [
+        {
+          "title": "Portfolio assessment",
+          "text": "Review of the matter inventory, legal issues, procedural position and existing documentation."
+        },
+        {
+          "title": "Matter planning",
+          "text": "Agreed responsibilities, next steps, budget assumptions and reporting arrangements."
+        },
+        {
+          "title": "Counsel coordination",
+          "text": "Briefing and coordination of local or specialist counsel within the agreed mandate."
+        },
+        {
+          "title": "Reporting and records",
+          "text": "Consistent status reports, decision logs and controlled matter documentation."
+        },
+        {
+          "title": "Resolution strategy",
+          "text": "Assessment of common issues, settlement opportunities and appropriate prioritisation."
+        },
+        {
+          "title": "Third-party claims",
+          "text": "Coordination of claims brought by or against third parties, distinct from litigation funding."
+        }
+      ],
+      "related": [
+        "S09",
+        "S10",
+        "S33"
+      ]
+    },
+    "S17": {
+      "overview": "We advise on the legal questions raised by proposed third-party funding of disputes where such arrangements may lawfully be considered. The work focuses on the proposed agreement, independence, confidentiality, conflicts and control of the proceedings. This is advisory work and does not represent an offer by the firm to fund litigation.",
+      "scope": [
+        {
+          "title": "Initial assessment",
+          "text": "Review of the proposed arrangement and the legal questions requiring specialist consideration."
+        },
+        {
+          "title": "Funding documentation",
+          "text": "Review of funding terms, obligations, termination provisions and allocation of costs."
+        },
+        {
+          "title": "Independence and control",
+          "text": "Assessment of decision-making, settlement authority and the conduct of proceedings."
+        },
+        {
+          "title": "Confidentiality",
+          "text": "Advice on information sharing, privilege concerns and protections in proposed disclosures."
+        },
+        {
+          "title": "Conflicts and disclosure",
+          "text": "Identification of conflicts and any applicable disclosure requirements."
+        },
+        {
+          "title": "Cross-border issues",
+          "text": "Coordination with qualified counsel on the law governing the funding and the underlying dispute."
+        }
+      ],
+      "related": [
+        "S10",
+        "S09",
+        "S16"
+      ]
+    },
+    "S18": {
+      "overview": "We advise on direct-tax issues affecting businesses, transactions and individuals. Our work considers the facts, the proposed arrangement and the applicable tax framework. Where accounting, valuation, return preparation or foreign tax advice is required, the responsibilities of the relevant professionals are agreed separately.",
+      "scope": [
+        {
+          "title": "Business taxation",
+          "text": "Advice on the tax implications of business activities, structures and proposed arrangements."
+        },
+        {
+          "title": "Transaction tax",
+          "text": "Tax review of acquisitions, disposals, reorganisations and investment structures."
+        },
+        {
+          "title": "International tax",
+          "text": "Cross-border income, treaty questions, residence and other international tax issues."
+        },
+        {
+          "title": "Transfer pricing",
+          "text": "Legal advisory and dispute support, coordinated with economic and documentation specialists where required."
+        },
+        {
+          "title": "Private-client tax",
+          "text": "Tax aspects of ownership, succession, investments and non-resident arrangements."
+        },
+        {
+          "title": "Reviews and responses",
+          "text": "Legal review of positions, notices and documentation, with disputes linked to the tax-litigation team."
+        }
+      ],
+      "related": [
+        "S21",
+        "S19",
+        "S32"
+      ]
+    },
+    "S19": {
+      "overview": "We advise on indirect-tax issues arising from the supply of goods and services and the way businesses operate. The work may involve reviewing a transaction, a tax position or a notice from an authority. We explain the issues requiring a decision and assist with the legal response and supporting documentation.",
+      "scope": [
+        {
+          "title": "Transaction review",
+          "text": "GST implications of contracts, business models, supply arrangements and reorganisations."
+        },
+        {
+          "title": "Classification and valuation",
+          "text": "Advice on the treatment of supplies and relevant classification or valuation questions."
+        },
+        {
+          "title": "Credits and refunds",
+          "text": "Legal assessment of input-tax-credit, refund and related documentation issues."
+        },
+        {
+          "title": "Notices and proceedings",
+          "text": "Preparation of replies, submissions and representation within the agreed scope."
+        },
+        {
+          "title": "Compliance advisory",
+          "text": "Legal review of invoicing, contracts and operating processes affecting indirect tax."
+        },
+        {
+          "title": "Legacy indirect taxes",
+          "text": "Advice on continuing disputes and obligations under earlier indirect-tax regimes where applicable."
+        }
+      ],
+      "related": [
+        "S21",
+        "S20",
+        "S01"
+      ]
+    },
+    "S20": {
+      "overview": "We advise on legal issues affecting the movement of goods across borders. Our work includes the customs treatment of transactions, documentation, regulatory requirements and disputes. We also support clients on trade-remedy and export-control questions within the agreed jurisdictional scope.",
+      "scope": [
+        {
+          "title": "Customs advisory",
+          "text": "Classification, valuation, origin and exemption questions relevant to proposed or completed transactions."
+        },
+        {
+          "title": "Import and export compliance",
+          "text": "Review of licences, restrictions, documentation and applicable trade requirements."
+        },
+        {
+          "title": "Customs disputes",
+          "text": "Responses to notices, assessment challenges and representation in available proceedings."
+        },
+        {
+          "title": "Trade remedies",
+          "text": "Legal support on anti-dumping, countervailing and safeguard matters where within scope."
+        },
+        {
+          "title": "Export controls",
+          "text": "Assessment of applicable Indian requirements and coordination of foreign-law advice where needed."
+        },
+        {
+          "title": "Supply-chain contracts",
+          "text": "Contract terms allocating customs, trade-compliance and delivery responsibilities."
+        }
+      ],
+      "related": [
+        "S19",
+        "S21",
+        "S27"
+      ]
+    },
+    "S21": {
+      "overview": "We advise and represent taxpayers in disputes concerning direct and indirect taxes. The work includes reviewing the record, preparing the legal position and addressing the procedural stage of the matter. We coordinate with the client's finance team and other advisers to ensure that submissions are supported by the relevant facts and documents.",
+      "scope": [
+        {
+          "title": "Notices and inquiries",
+          "text": "Assessment of requests, allegations and the material required for a response."
+        },
+        {
+          "title": "Assessment disputes",
+          "text": "Legal submissions and representation concerning disputed tax treatment or liability."
+        },
+        {
+          "title": "Appeals",
+          "text": "Preparation of grounds, supporting papers and representation before the appropriate forum."
+        },
+        {
+          "title": "Investigations",
+          "text": "Advice during tax investigations, evidence review and coordination of responses."
+        },
+        {
+          "title": "Court proceedings",
+          "text": "Advice on writ and appellate remedies where available on the facts."
+        },
+        {
+          "title": "Resolution and implementation",
+          "text": "Assessment of lawful resolution routes and the steps following an order or settlement."
+        }
+      ],
+      "related": [
+        "S18",
+        "S19",
+        "S20"
+      ]
+    },
+    "S22": {
+      "overview": "We advise owners, developers, occupiers and investors on property matters. The work includes reviewing title and transaction documents, identifying relevant approvals and documenting the proposed arrangement. Where a dispute arises, the property and litigation issues are considered together, including the appropriate forum and available relief.",
+      "scope": [
+        {
+          "title": "Title and diligence",
+          "text": "Review of available title records, encumbrances, land-use issues and transaction-specific risks."
+        },
+        {
+          "title": "Property transactions",
+          "text": "Sale, purchase, transfer and investment documentation for residential and commercial property."
+        },
+        {
+          "title": "Leasing and occupation",
+          "text": "Lease, licence and occupation arrangements, including commercial terms and termination."
+        },
+        {
+          "title": "Development projects",
+          "text": "Development agreements, joint arrangements and construction-related documentation."
+        },
+        {
+          "title": "RERA matters",
+          "text": "Legal advice on project-related obligations, complaints and proceedings where applicable."
+        },
+        {
+          "title": "Property disputes",
+          "text": "Title, possession, contractual and development-related disputes and related proceedings."
+        }
+      ],
+      "related": [
+        "S09",
+        "S23",
+        "S04"
+      ]
+    },
+    "S23": {
+      "overview": "We advise on the legal arrangements used to develop and deliver construction and infrastructure projects. Our work covers project documentation, the allocation of responsibilities and issues that arise during performance. When a claim develops, we review the contract and project record with the client and relevant technical advisers.",
+      "scope": [
+        {
+          "title": "Project documentation",
+          "text": "Construction, engineering, procurement, concession and related project agreements."
+        },
+        {
+          "title": "Risk allocation",
+          "text": "Review of scope, performance obligations, securities, insurance and termination provisions."
+        },
+        {
+          "title": "Project delivery",
+          "text": "Advice on variations, notices, payment issues and contract administration."
+        },
+        {
+          "title": "Claims and delays",
+          "text": "Legal review of delay, disruption, variation and payment claims with supporting records."
+        },
+        {
+          "title": "Dispute resolution",
+          "text": "Negotiation, arbitration and litigation arising from project performance or termination."
+        },
+        {
+          "title": "Project interfaces",
+          "text": "Coordination with property, finance, environmental and regulatory workstreams."
+        }
+      ],
+      "related": [
+        "S10",
+        "S22",
+        "S40"
+      ]
+    },
+    "S24": {
+      "overview": "We advise on legal issues arising in energy and natural-resource businesses. The work may involve a project, an investment, a supply arrangement or a regulatory matter. We consider the contracts and permissions alongside financing, land, environmental obligations and the interests of the parties involved.",
+      "scope": [
+        {
+          "title": "Power and renewables",
+          "text": "Project and commercial documentation for relevant power and renewable-energy activities."
+        },
+        {
+          "title": "Resource transactions",
+          "text": "Legal diligence and agreements for acquisitions, investments and operating arrangements."
+        },
+        {
+          "title": "Supply and offtake",
+          "text": "Review of energy supply, offtake, transmission and related commercial contracts."
+        },
+        {
+          "title": "Regulatory matters",
+          "text": "Advice on permissions, operating conditions and relevant regulatory proceedings."
+        },
+        {
+          "title": "Project development",
+          "text": "Coordination of finance, land, construction and environmental documentation."
+        },
+        {
+          "title": "Energy disputes",
+          "text": "Contractual, payment, performance and regulatory disputes within the agreed scope."
+        }
+      ],
+      "related": [
+        "S23",
+        "S25",
+        "S04"
+      ]
+    },
+    "S25": {
+      "overview": "We advise businesses and project participants on environmental legal requirements and related disputes. Our work includes reviewing the proposed activity, the relevant permissions and the obligations arising during operation. Technical assessments are undertaken by the appropriate specialists, with legal advice addressing their implications.",
+      "scope": [
+        {
+          "title": "Permissions and conditions",
+          "text": "Legal review of environmental approvals, consents and applicable conditions."
+        },
+        {
+          "title": "Compliance reviews",
+          "text": "Assessment of operational records, reporting duties and identified legal gaps."
+        },
+        {
+          "title": "Transaction diligence",
+          "text": "Environmental legal risks in property, project and corporate transactions."
+        },
+        {
+          "title": "Waste and product obligations",
+          "text": "Advice on relevant waste-management, producer-responsibility and product-related requirements."
+        },
+        {
+          "title": "Climate and disclosures",
+          "text": "Legal review of applicable climate-related obligations and environmental claims."
+        },
+        {
+          "title": "Disputes and enforcement",
+          "text": "Responses, representations and proceedings before relevant authorities and fora."
+        }
+      ],
+      "related": [
+        "S24",
+        "S22",
+        "S34"
+      ]
+    },
+    "S26": {
+      "overview": "We advise on the protection, ownership and commercial use of intellectual property. The work begins with identifying the relevant rights and the client's intended use. We support applications and portfolios within the agreed scope and help document the rights of creators, businesses, employees and commercial partners.",
+      "scope": [
+        {
+          "title": "Patents",
+          "text": "Patentability and filing strategy, drafting, prosecution and portfolio work through appropriately qualified professionals."
+        },
+        {
+          "title": "Trade marks",
+          "text": "Clearance, applications, prosecution, oppositions, renewals and brand-portfolio advice."
+        },
+        {
+          "title": "Designs and copyright",
+          "text": "Advice on registrable designs, copyright, ownership records and appropriate protection steps."
+        },
+        {
+          "title": "Licensing and technology transfer",
+          "text": "Licences, assignments, research collaborations and commercialisation agreements."
+        },
+        {
+          "title": "Portfolio and diligence",
+          "text": "Ownership reviews, transaction diligence, renewals and coordination of foreign associates."
+        },
+        {
+          "title": "Specialist rights",
+          "text": "Trade secrets, geographical indications, plant varieties, biodiversity and other relevant rights within confirmed capability."
+        }
+      ],
+      "related": [
+        "S27",
+        "S28",
+        "S29"
+      ]
+    },
+    "S27": {
+      "overview": "We advise and represent clients in disputes concerning intellectual property and related commercial rights. Our work includes assessing the asserted right, ownership, evidence and the relief sought. We act on enforcement and defence matters, with the strategy and forum determined by the applicable law and the facts.",
+      "scope": [
+        {
+          "title": "Trade mark disputes",
+          "text": "Infringement, passing off, opposition and related brand-protection proceedings."
+        },
+        {
+          "title": "Patent and design disputes",
+          "text": "Advice on infringement, validity, ownership and available procedural routes."
+        },
+        {
+          "title": "Copyright disputes",
+          "text": "Claims and defences concerning protected works, licensing and alleged unauthorised use."
+        },
+        {
+          "title": "Confidential information",
+          "text": "Trade-secret, breach-of-confidence and related contractual disputes."
+        },
+        {
+          "title": "Online enforcement",
+          "text": "Legal assessment of platform notices, domain-name disputes and digital misuse."
+        },
+        {
+          "title": "Border and commercial measures",
+          "text": "Advice on applicable customs measures and negotiated or court-based resolution for eligible rights."
+        }
+      ],
+      "related": [
+        "S26",
+        "S09",
+        "S20"
+      ]
+    },
+    "S28": {
+      "overview": "We advise businesses on the legal arrangements behind technology products and data use. The work includes commercial agreements, privacy requirements and the responsibilities of service providers and users. We also support legal responses to cybersecurity incidents, working with technical specialists rather than replacing their investigation.",
+      "scope": [
+        {
+          "title": "Technology agreements",
+          "text": "Software, SaaS, cloud, outsourcing, development and technology-procurement contracts."
+        },
+        {
+          "title": "Privacy and data",
+          "text": "Data-use assessments, notices, processing agreements and applicable compliance requirements."
+        },
+        {
+          "title": "Cybersecurity response",
+          "text": "Legal coordination of incident response, evidence preservation and applicable notifications."
+        },
+        {
+          "title": "Digital platforms",
+          "text": "Platform terms, intermediary issues, user processes and digital-commerce arrangements."
+        },
+        {
+          "title": "AI and emerging technology",
+          "text": "Legal review of development, procurement, intellectual property and data risks."
+        },
+        {
+          "title": "Technology disputes",
+          "text": "Contract, ownership, misuse and other disputes involving technology or information."
+        }
+      ],
+      "related": [
+        "S26",
+        "S01",
+        "S13"
+      ]
+    },
+    "S29": {
+      "overview": "We advise participants in media, entertainment and sport on the legal arrangements supporting their work. Our role includes reviewing rights, documenting commercial relationships and addressing content or regulatory concerns. Where disputes arise, we consider the relevant contract, rights and publication context.",
+      "scope": [
+        {
+          "title": "Production and content",
+          "text": "Production, commissioning, distribution and content-acquisition agreements."
+        },
+        {
+          "title": "Rights and clearances",
+          "text": "Ownership, licensing, permissions and rights reviews for proposed use."
+        },
+        {
+          "title": "Talent and sponsorship",
+          "text": "Artist, talent, endorsement, sponsorship and representation agreements."
+        },
+        {
+          "title": "Advertising and brands",
+          "text": "Legal review of advertising, promotional claims and commercial partnerships."
+        },
+        {
+          "title": "Sports and gaming",
+          "text": "Contractual and regulatory advice within confirmed sports, esports and gaming capability."
+        },
+        {
+          "title": "Media disputes",
+          "text": "Rights, contract, reputation and content-related disputes and appropriate remedies."
+        }
+      ],
+      "related": [
+        "S26",
+        "S33",
+        "S09"
+      ]
+    },
+    "S30": {
+      "overview": "We advise employers and individuals on employment and workplace matters. Our work covers the documents and processes governing the relationship, as well as issues arising during employment or on departure. Sensitive workplace concerns are handled with regard to confidentiality, fairness and the applicable legal requirements.",
+      "scope": [
+        {
+          "title": "Employment documents",
+          "text": "Employment, consultancy, confidentiality and senior-management agreements."
+        },
+        {
+          "title": "Workplace policies",
+          "text": "Policies and procedures relevant to the workforce, business and applicable law."
+        },
+        {
+          "title": "Labour compliance",
+          "text": "Legal review of employment conditions, contractor arrangements and relevant obligations."
+        },
+        {
+          "title": "POSH matters",
+          "text": "Advice on workplace prevention processes, committee support and legal requirements within the permitted role."
+        },
+        {
+          "title": "Exits and restructuring",
+          "text": "Advice on departures, disciplinary processes and employment aspects of business change."
+        },
+        {
+          "title": "Employment disputes",
+          "text": "Representation and advisory support in workplace claims, investigations and related proceedings."
+        }
+      ],
+      "related": [
+        "S01",
+        "S13",
+        "S09"
+      ]
+    },
+    "S31": {
+      "overview": "We advise individuals on family and matrimonial matters with care for the personal circumstances involved. Our work includes explaining the legal options, preparing the necessary documents and representing clients in proceedings. Where appropriate, we also assist with negotiation and settlement, keeping the interests of children and confidentiality in view.",
+      "scope": [
+        {
+          "title": "Matrimonial proceedings",
+          "text": "Advice and representation concerning marriage-related proceedings under the applicable personal or other law."
+        },
+        {
+          "title": "Maintenance and financial issues",
+          "text": "Assessment of financial claims, obligations and supporting documentation."
+        },
+        {
+          "title": "Parenting and guardianship",
+          "text": "Legal support in child-related and guardianship matters within the relevant framework."
+        },
+        {
+          "title": "Family arrangements",
+          "text": "Advice and documentation for lawful family settlements and related property arrangements."
+        },
+        {
+          "title": "Protective proceedings",
+          "text": "Advice on available protective remedies based on the individual circumstances."
+        },
+        {
+          "title": "Negotiated resolution",
+          "text": "Mediation preparation, settlement terms and coordination of connected proceedings."
+        }
+      ],
+      "related": [
+        "S11",
+        "S32",
+        "S09"
+      ]
+    },
+    "S32": {
+      "overview": "We advise individuals and families on the legal arrangements for ownership and succession. The work considers the assets, family circumstances and the client's intentions, together with relevant tax and cross-border issues. We prepare the required documents and assist with disputes or administration where they arise.",
+      "scope": [
+        {
+          "title": "Wills and succession",
+          "text": "Drafting and review of wills and advice on applicable succession requirements."
+        },
+        {
+          "title": "Estate planning",
+          "text": "Legal arrangements for ownership, transfer and the administration of assets."
+        },
+        {
+          "title": "Trusts and family arrangements",
+          "text": "Trust structures and family settlements within confirmed legal and tax capability."
+        },
+        {
+          "title": "Family businesses",
+          "text": "Ownership, governance, transition and succession arrangements for family enterprises."
+        },
+        {
+          "title": "Probate and disputes",
+          "text": "Advice on probate, administration and contested inheritance or estate matters."
+        },
+        {
+          "title": "Cross-border coordination",
+          "text": "Work with qualified foreign advisers on assets, residence and succession outside India."
+        }
+      ],
+      "related": [
+        "S18",
+        "S31",
+        "S22"
+      ]
+    },
+    "S33": {
+      "overview": "We advise businesses and consumers on disputes concerning products and services. Our work includes assessing the complaint, relevant records and the responsibilities of the parties. We also assist businesses in reviewing customer terms, complaint processes and product-related legal requirements.",
+      "scope": [
+        {
+          "title": "Consumer disputes",
+          "text": "Advice and representation in complaints and connected appellate proceedings."
+        },
+        {
+          "title": "Product liability",
+          "text": "Assessment of alleged defects, warnings, representations and related liability issues."
+        },
+        {
+          "title": "Service complaints",
+          "text": "Disputes concerning service delivery, contractual obligations and consumer rights."
+        },
+        {
+          "title": "E-commerce terms",
+          "text": "Review of customer terms, returns, disclosures and complaint-handling processes."
+        },
+        {
+          "title": "Regulatory responses",
+          "text": "Legal support for notices, investigations and consumer-related enforcement matters."
+        },
+        {
+          "title": "Portfolio coordination",
+          "text": "Consistent management and reporting of multiple consumer disputes where agreed."
+        }
+      ],
+      "related": [
+        "S09",
+        "S16",
+        "S29"
+      ]
+    },
+    "S34": {
+      "overview": "We advise on the legal duties and decisions of public authorities and regulated businesses. Our work may involve interpreting a requirement, responding to an administrative action or pursuing an available remedy. We assess the statutory framework, the decision-making process and the facts relevant to the proposed action.",
+      "scope": [
+        {
+          "title": "Regulatory advice",
+          "text": "Assessment of applicable permissions, conditions and legal obligations."
+        },
+        {
+          "title": "Administrative decisions",
+          "text": "Review of notices, decisions and the process followed by the relevant authority."
+        },
+        {
+          "title": "Writ proceedings",
+          "text": "Advice on constitutional and public-law remedies where available."
+        },
+        {
+          "title": "Statutory appeals",
+          "text": "Preparation and conduct of challenges under the relevant legal framework."
+        },
+        {
+          "title": "Service-law matters",
+          "text": "Advice on public-employment and service disputes within confirmed practice capability."
+        },
+        {
+          "title": "Compliance responses",
+          "text": "Legal submissions, representations and practical steps following regulatory action."
+        }
+      ],
+      "related": [
+        "S40",
+        "S09",
+        "S25"
+      ]
+    },
+    "S35": {
+      "overview": "We advise businesses and institutions operating in healthcare, pharmaceuticals and life sciences. The work brings together regulatory, commercial, intellectual-property and dispute issues relevant to the proposed activity. Scientific, clinical and technical assessments remain with the appropriate specialists, with our role focused on the legal requirements.",
+      "scope": [
+        {
+          "title": "Sector regulation",
+          "text": "Legal advice on relevant licences, permissions, operating conditions and regulatory processes."
+        },
+        {
+          "title": "Commercial agreements",
+          "text": "Supply, distribution, manufacturing, research and service arrangements."
+        },
+        {
+          "title": "Transactions",
+          "text": "Legal diligence and documentation for investments, acquisitions and business combinations."
+        },
+        {
+          "title": "Research and intellectual property",
+          "text": "Ownership, collaboration, confidentiality and licensing arrangements."
+        },
+        {
+          "title": "Data and employment",
+          "text": "Privacy, information handling and workplace issues relevant to the sector."
+        },
+        {
+          "title": "Disputes and investigations",
+          "text": "Legal support for contractual, regulatory and other sector-related proceedings."
+        }
+      ],
+      "related": [
+        "S26",
+        "S28",
+        "S02"
+      ]
+    },
+    "S36": {
+      "overview": "We advise on the legal issues arising from insurance arrangements and claims. Our work includes reviewing policy terms, assessing the positions of the parties and preparing the legal response to a dispute. We also advise insurance-sector participants on relevant commercial and regulatory matters within the agreed scope.",
+      "scope": [
+        {
+          "title": "Policy and coverage advice",
+          "text": "Legal interpretation of policy terms, exclusions, conditions and coverage questions."
+        },
+        {
+          "title": "Claims disputes",
+          "text": "Advice and representation on contested claims and related proceedings."
+        },
+        {
+          "title": "Commercial agreements",
+          "text": "Distribution, service, reinsurance and other agreements within confirmed capability."
+        },
+        {
+          "title": "Sector regulation",
+          "text": "Legal review of relevant operating requirements and regulatory communications."
+        },
+        {
+          "title": "Transactions",
+          "text": "Diligence and documentation for insurance-related investments and business arrangements."
+        },
+        {
+          "title": "Liability and recovery",
+          "text": "Coordination of underlying liability, subrogation and recovery issues."
+        }
+      ],
+      "related": [
+        "S33",
+        "S09",
+        "S04"
+      ]
+    },
+    "S37": {
+      "overview": "We advise on legal issues affecting transport and logistics activities, including maritime and aviation matters within confirmed capability. The work may involve contracts, financing, regulatory requirements or claims. Cross-border and specialist procedural questions are coordinated with counsel qualified in the relevant jurisdiction.",
+      "scope": [
+        {
+          "title": "Transport agreements",
+          "text": "Carriage, logistics, warehousing, charter and other operating agreements."
+        },
+        {
+          "title": "Claims and disputes",
+          "text": "Cargo, performance, payment and liability disputes arising from transport activities."
+        },
+        {
+          "title": "Maritime matters",
+          "text": "Legal advice on shipping transactions and available maritime remedies within confirmed scope."
+        },
+        {
+          "title": "Aviation matters",
+          "text": "Aircraft-related commercial arrangements, leasing and relevant regulatory questions."
+        },
+        {
+          "title": "Sector transactions",
+          "text": "Diligence and documentation for investments, assets and financing arrangements."
+        },
+        {
+          "title": "Cross-border coordination",
+          "text": "Coordination of foreign-law advice and specialist proceedings where required."
+        }
+      ],
+      "related": [
+        "S20",
+        "S10",
+        "S04"
+      ]
+    },
+    "S38": {
+      "overview": "We advise educational institutions, trusts and non-profit organisations on their legal structure and activities. Our work covers governance, contracts, property and the requirements relevant to the organisation. Tax, funding and regulatory issues are considered with the appropriate specialists as part of the agreed mandate.",
+      "scope": [
+        {
+          "title": "Formation and governance",
+          "text": "Legal structures, constitutive documents, governing-body processes and internal policies."
+        },
+        {
+          "title": "Educational regulation",
+          "text": "Advice on relevant permissions, institutional obligations and regulatory proceedings."
+        },
+        {
+          "title": "Funding arrangements",
+          "text": "Legal review of grants, donations, restrictions and applicable compliance requirements."
+        },
+        {
+          "title": "Property and operations",
+          "text": "Leases, service contracts, collaborations and arrangements supporting institutional activities."
+        },
+        {
+          "title": "Employment and safeguarding",
+          "text": "Legal advice on workplace policies, employment and applicable institutional responsibilities."
+        },
+        {
+          "title": "Disputes",
+          "text": "Representation and advice on contractual, regulatory and governance disputes."
+        }
+      ],
+      "related": [
+        "S34",
+        "S30",
+        "S18"
+      ]
+    },
+    "S39": {
+      "overview": "We advise on Indian immigration and mobility matters within the scope of the firm's authorised practice. The work includes reviewing the proposed purpose of travel or residence, relevant documents and applicable requirements. Advice on foreign immigration law is provided through appropriately qualified advisers in the relevant country.",
+      "scope": [
+        {
+          "title": "Business mobility",
+          "text": "Indian legal requirements relevant to business travel, employment and assignments."
+        },
+        {
+          "title": "Applications and records",
+          "text": "Review and preparation of supporting legal documentation within the agreed scope."
+        },
+        {
+          "title": "Residence-related matters",
+          "text": "Advice on relevant Indian residence, registration and related processes."
+        },
+        {
+          "title": "Employer coordination",
+          "text": "Employment, tax and data issues connected with international assignments."
+        },
+        {
+          "title": "Family and private matters",
+          "text": "Coordination of mobility questions with family and private-client advice."
+        },
+        {
+          "title": "Overseas referrals",
+          "text": "Coordination with authorised foreign immigration counsel where local advice is required."
+        }
+      ],
+      "related": [
+        "S30",
+        "S08",
+        "S32"
+      ]
+    },
+    "S40": {
+      "overview": "We advise participants in public procurement and government contracts on the legal aspects of bidding and performance. Our work includes reviewing the tender terms, eligibility conditions and proposed contractual obligations. We also assist with disputes concerning the procurement process or the implementation of a contract.",
+      "scope": [
+        {
+          "title": "Tender review",
+          "text": "Legal assessment of bid conditions, eligibility, securities and submission requirements."
+        },
+        {
+          "title": "Bid arrangements",
+          "text": "Consortium, joint-venture and subcontracting arrangements for proposed participation."
+        },
+        {
+          "title": "Public contracts",
+          "text": "Review and negotiation support for contracts within the applicable procurement process."
+        },
+        {
+          "title": "Performance issues",
+          "text": "Advice on variations, payments, delays, termination and contractual claims."
+        },
+        {
+          "title": "Bid challenges",
+          "text": "Assessment of available remedies concerning disqualification, evaluation and award decisions."
+        },
+        {
+          "title": "Connected workstreams",
+          "text": "Coordination with public law, competition, infrastructure and dispute-resolution advice."
+        }
+      ],
+      "related": [
+        "S34",
+        "S23",
+        "S10"
+      ]
+    }
+  },
+  "industries": [
+    {
+      "slug": "technology-digital-business",
+      "name": "Technology & Digital Business",
+      "summary": "Legal work for technology businesses, digital services and data-led operations.",
+      "serviceIds": [
+        "S01",
+        "S03",
+        "S26",
+        "S28",
+        "S30"
+      ],
+      "approved": false,
+      "homeOrder": 1
+    },
+    {
+      "slug": "financial-services-fintech",
+      "name": "Financial Services & FinTech",
+      "summary": "Regulation, transactions, financing and dispute issues for financial-service businesses.",
+      "serviceIds": [
+        "S04",
+        "S05",
+        "S06",
+        "S14",
+        "S28",
+        "S34"
+      ],
+      "approved": false,
+      "homeOrder": 3
+    },
+    {
+      "slug": "real-estate-construction",
+      "name": "Real Estate & Construction",
+      "summary": "Property transactions, development, construction, finance and related disputes.",
+      "intro": "Legal work for property, development and construction. Our work brings together title, transactions, project contracts, financing, tax and dispute issues.",
+      "serviceIds": [
+        "S22",
+        "S23",
+        "S04",
+        "S19",
+        "S10"
+      ],
+      "approved": false,
+      "homeOrder": 2
+    },
+    {
+      "slug": "energy-infrastructure",
+      "name": "Energy & Infrastructure",
+      "summary": "Project development, commercial arrangements, regulation and dispute issues.",
+      "serviceIds": [
+        "S23",
+        "S24",
+        "S25",
+        "S04",
+        "S10"
+      ],
+      "approved": false
+    },
+    {
+      "slug": "manufacturing-industrials",
+      "name": "Manufacturing & Industrials",
+      "summary": "Supply chains, facilities, workforce, trade, contracts and dispute matters.",
+      "serviceIds": [
+        "S01",
+        "S20",
+        "S25",
+        "S26",
+        "S30"
+      ],
+      "approved": false,
+      "homeOrder": 6
+    },
+    {
+      "slug": "consumer-retail",
+      "name": "Consumer & Retail",
+      "summary": "Product, distribution, advertising, consumer and digital-commerce questions.",
+      "serviceIds": [
+        "S01",
+        "S19",
+        "S26",
+        "S28",
+        "S33"
+      ],
+      "approved": false,
+      "homeOrder": 5
+    },
+    {
+      "slug": "healthcare-life-sciences",
+      "name": "Healthcare & Life Sciences",
+      "summary": "Regulatory, commercial, IP, employment and compliance issues in healthcare and life sciences.",
+      "serviceIds": [
+        "S26",
+        "S28",
+        "S30",
+        "S33",
+        "S35"
+      ],
+      "approved": false,
+      "homeOrder": 4
+    },
+    {
+      "slug": "media-entertainment-sports",
+      "name": "Media, Entertainment & Sports",
+      "summary": "Rights, production, licensing, distribution and disputes for creative and sporting activities.",
+      "serviceIds": [
+        "S01",
+        "S26",
+        "S27",
+        "S28",
+        "S29"
+      ],
+      "approved": false
+    },
+    {
+      "slug": "transport-logistics",
+      "name": "Transport & Logistics",
+      "summary": "Contracts, assets, regulation, customs and disputes across transport and logistics.",
+      "serviceIds": [
+        "S04",
+        "S20",
+        "S30",
+        "S36",
+        "S37"
+      ],
+      "approved": false
+    },
+    {
+      "slug": "education-nonprofits",
+      "name": "Education & Non-profits",
+      "summary": "Governance, operations, regulation, employment and property matters for institutions.",
+      "serviceIds": [
+        "S01",
+        "S22",
+        "S30",
+        "S34",
+        "S38"
+      ],
+      "approved": false
+    },
+    {
+      "slug": "hospitality-leisure",
+      "name": "Hospitality & Leisure",
+      "summary": "Property, operating agreements, licensing, workforce and consumer matters.",
+      "serviceIds": [
+        "S01",
+        "S19",
+        "S22",
+        "S30",
+        "S33"
+      ],
+      "approved": false
+    },
+    {
+      "slug": "professional-business-services",
+      "name": "Professional & Business Services",
+      "summary": "Business structure, client contracts, employment, tax and liability questions.",
+      "serviceIds": [
+        "S01",
+        "S18",
+        "S28",
+        "S30",
+        "S36"
+      ],
+      "approved": false
+    }
+  ],
+  "people": [
+    {
+      "slug": "lawyer-profile-1",
+      "name": "Lawyer profile 1",
+      "role": "Role / to be approved",
+      "practiceSummary": "Verified name, role and area of practice.",
+      "biography": [
+        "A factual biography covering the lawyer's current work, qualifications and professional background."
+      ],
+      "priorExperience": "Experience gained before joining RNK Legalheads is described here separately.",
+      "qualifications": "Verified qualifications",
+      "enrolment": "Approved enrolment particulars",
+      "languages": "Confirmed languages",
+      "office": "Verified office details",
+      "serviceIds": [
+        "S10",
+        "S09"
+      ],
+      "approved": false,
+      "preview": true
+    },
+    {
+      "slug": "lawyer-profile-2",
+      "name": "Lawyer profile 2",
+      "role": "Role / to be approved",
+      "practiceSummary": "Verified name, role and area of practice.",
+      "biography": [
+        "A factual biography covering the lawyer's current work, qualifications and professional background."
+      ],
+      "priorExperience": "Experience gained before joining RNK Legalheads is described here separately.",
+      "qualifications": "Verified qualifications",
+      "enrolment": "Approved enrolment particulars",
+      "languages": "Confirmed languages",
+      "office": "Verified office details",
+      "serviceIds": [
+        "S01",
+        "S02"
+      ],
+      "approved": false,
+      "preview": true
+    },
+    {
+      "slug": "lawyer-profile-3",
+      "name": "Lawyer profile 3",
+      "role": "Role / to be approved",
+      "practiceSummary": "Verified name, role and area of practice.",
+      "biography": [
+        "A factual biography covering the lawyer's current work, qualifications and professional background."
+      ],
+      "priorExperience": "Experience gained before joining RNK Legalheads is described here separately.",
+      "qualifications": "Verified qualifications",
+      "enrolment": "Approved enrolment particulars",
+      "languages": "Confirmed languages",
+      "office": "Verified office details",
+      "serviceIds": [
+        "S26",
+        "S27"
+      ],
+      "approved": false,
+      "preview": true
+    }
+  ],
+  "jobs": [
+    {
+      "jobId": "Approved job ID",
+      "slug": "approved-role-title",
+      "title": "Approved role title",
+      "practice": "Practice",
+      "location": "Verified office",
+      "workArrangement": "Approved work arrangement",
+      "experience": "Experience requirement",
+      "summary": "Practice, location and experience requirements are set out in the approved vacancy.",
+      "responsibilities": [
+        "Approved responsibilities, reporting arrangements and qualifications belong here."
+      ],
+      "qualifications": [
+        "State the office, work arrangement and closing date."
+      ],
+      "applicationInstructions": "Use the verified careers email or approved application system. Include the vacancy reference.",
+      "status": "open",
+      "approved": false,
+      "preview": true
+    }
+  ],
+  "publications": [
+    {
+      "type": "article",
+      "slug": "preparing-for-a-commercial-transaction",
+      "title": "Preparing for a commercial transaction",
+      "summary": "A working outline for reviewing scope, documents and responsibilities.",
+      "author": {
+        "name": "Approved lawyer"
+      },
+      "serviceIds": [
+        "S10",
+        "S09"
+      ],
+      "body": [
+        {
+          "kind": "h2",
+          "text": "The starting point"
+        },
+        {
+          "kind": "p",
+          "text": "Begin with the question the article addresses. Define its scope and identify the documents or facts needed to understand the issue."
+        },
+        {
+          "kind": "h2",
+          "text": "Points to consider"
+        },
+        {
+          "kind": "p",
+          "text": "Use short sections with informative headings. Support legal propositions with primary sources and make assumptions explicit."
+        },
+        {
+          "kind": "h2",
+          "text": "Sources and review"
+        },
+        {
+          "kind": "p",
+          "text": "Link to the official materials used, record the review date and keep a correction history for material changes."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Official source to be added on approval"
+        }
+      ],
+      "approved": false,
+      "preview": true
+    },
+    {
+      "type": "judgment",
+      "slug": "a-structured-note-on-a-recent-decision",
+      "title": "A structured note on a recent decision",
+      "summary": "The case, issue, decision and source are recorded separately.",
+      "author": {
+        "name": "Approved lawyer"
+      },
+      "serviceIds": [
+        "S10",
+        "S09"
+      ],
+      "caseName": "Verified case name",
+      "court": "Court or tribunal",
+      "caseNumber": "Official court record required",
+      "neutralCitation": "Verified citation, where available",
+      "proceduralStatus": "Final / interim / appeal status to be checked",
+      "body": [
+        {
+          "kind": "h2",
+          "text": "Background"
+        },
+        {
+          "kind": "p",
+          "text": "Set out the parties, the dispute and the material procedural history in neutral terms."
+        },
+        {
+          "kind": "h2",
+          "text": "The issue"
+        },
+        {
+          "kind": "p",
+          "text": "Summarise the question before the court without suggesting that the ruling answers every related dispute. Identify the material procedural context."
+        },
+        {
+          "kind": "h2",
+          "text": "The decision and its limits"
+        },
+        {
+          "kind": "p",
+          "text": "Separate the court's holding from the author's analysis. Explain the relevant limits, exceptions and any subsequent development checked by the reviewer."
+        },
+        {
+          "kind": "h2",
+          "text": "Implications"
+        },
+        {
+          "kind": "p",
+          "text": "RNK commentary on the practical effect, clearly identified as analysis rather than the holding."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Official judgment to be linked on approval"
+        }
+      ],
+      "approved": false,
+      "preview": true
+    },
+    {
+      "type": "update",
+      "slug": "tracking-a-regulatory-development",
+      "title": "Tracking a regulatory development",
+      "summary": "The status, effective date and source stay visible to the reader.",
+      "author": {
+        "name": "Approved lawyer"
+      },
+      "serviceIds": [
+        "S34",
+        "S10"
+      ],
+      "issuer": "Verified authority",
+      "instrument": "Official notification or instrument",
+      "status": "notified",
+      "body": [
+        {
+          "kind": "h2",
+          "text": "What has changed"
+        },
+        {
+          "kind": "p",
+          "text": "Set out the change in clear terms. Distinguish a proposal from a final instrument and identify any transition provisions."
+        },
+        {
+          "kind": "h2",
+          "text": "Who may be affected"
+        },
+        {
+          "kind": "p",
+          "text": "Use short sections with informative headings. Support legal propositions with primary sources and make assumptions explicit."
+        },
+        {
+          "kind": "h2",
+          "text": "Relevant dates"
+        },
+        {
+          "kind": "p",
+          "text": "State the publication date and each commencement or effective date, including any phased commencement."
+        },
+        {
+          "kind": "h2",
+          "text": "Points requiring attention"
+        },
+        {
+          "kind": "ul",
+          "items": [
+            "Actions that may be needed",
+            "Open questions awaiting clarification"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "label": "Official instrument to be linked on approval"
+        }
+      ],
+      "approved": false,
+      "preview": true
+    }
+  ],
+  "newsletters": [
+    {
+      "slug": "rnk-legal-update",
+      "title": "RNK Legal Update",
+      "focus": "General legal update",
+      "introduction": "Selected articles, recent decisions and legal developments across our practices.",
+      "contents": [
+        "Corporate and commercial matters",
+        "Disputes and recent judgments",
+        "Tax and regulatory updates"
+      ],
+      "items": [
+        {
+          "type": "article",
+          "slug": "preparing-for-a-commercial-transaction"
+        },
+        {
+          "type": "judgment",
+          "slug": "a-structured-note-on-a-recent-decision"
+        },
+        {
+          "type": "update",
+          "slug": "tracking-a-regulatory-development"
+        }
+      ],
+      "approved": false,
+      "preview": true
+    },
+    {
+      "slug": "disputes-review",
+      "title": "Disputes Review",
+      "focus": "Disputes & Recovery",
+      "introduction": "A selected collection of approved publications, with a short editorial introduction.",
+      "contents": [
+        "Disputes and recent judgments"
+      ],
+      "items": [
+        {
+          "type": "judgment",
+          "slug": "a-structured-note-on-a-recent-decision"
+        }
+      ],
+      "approved": false,
+      "preview": true
+    },
+    {
+      "slug": "business-tax-review",
+      "title": "Business & Tax Review",
+      "focus": "Business & Tax",
+      "introduction": "A selected collection of approved publications, with a short editorial introduction.",
+      "contents": [
+        "Corporate and commercial matters",
+        "Tax and regulatory updates"
+      ],
+      "items": [
+        {
+          "type": "article",
+          "slug": "preparing-for-a-commercial-transaction"
+        },
+        {
+          "type": "update",
+          "slug": "tracking-a-regulatory-development"
+        }
+      ],
+      "approved": false,
+      "preview": true
+    }
+  ]
+}

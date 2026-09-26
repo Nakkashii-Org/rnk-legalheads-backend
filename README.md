@@ -112,6 +112,37 @@ include message bodies, resumes or tokens.
 4. Create a double opt-in confirmation template → `DOI_TEMPLATE_ID`.
 5. Create the contact attribute `MANAGE_TOKEN` (text).
 
+## Website content (phase A)
+
+The website's content (services, industries, people, jobs, publications, newsletters and site
+settings) lives in MongoDB and is served read-only:
+
+| Endpoint | Returns |
+|---|---|
+| `GET /api/content/bundle` | Everything the website needs in one response (the website fetches this and caches it for 5 minutes) |
+| `GET /api/content/site-settings` | Firm name, statement, disclaimer, contact details |
+| `GET /api/content/services`, `/services/{slug}` | Services; the detail includes overview, scope and related services |
+| `GET /api/content/industries`, `/people`, `/jobs`, `/newsletters` (and `/{slug}`) | Lists and single records |
+| `GET /api/content/publications?type=&service=&year=&court=&q=&page=` | Filtered, 12 per page: `{ items, total, page, pageCount }` |
+| `GET /api/content/publications/{type}/{slug}` | One article, judgment note or legal update |
+| `GET /api/search?q=` | Matching services, people, publications and newsletter issues |
+
+**Who sees what:**
+- **Public:** only records with status `published`. Never layout previews or held services.
+- **Draft review mode:** the website's server sends the header `x-content-preview: <CONTENT_PREVIEW_SECRET>`, and then drafts are included. Those responses are never cached.
+
+**Import the content (once per database):**
+
+```bash
+npm run seed            # adds missing records from seed/content.json; never overwrites existing ones
+npm run seed -- --force # overwrite existing records with the file's version
+```
+
+To import into Atlas from your computer, point `MONGODB_URI` at Atlas for that one command.
+`seed/content.json` is exported from the website with:
+`SHOW_DRAFT_CONTENT=true npx tsx scripts/export-content.ts ../rnk-legalhead-backend/seed/content.json`.
+Everything is imported as a draft (guide p.150: approve record by record).
+
 ## Resume storage
 
 | `STORAGE_DRIVER` | Where resumes go | Use |
@@ -141,7 +172,7 @@ and the confirm link is printed, so the whole newsletter flow can be tried local
 ## Tests
 
 ```bash
-npm test          # 42 tests; starts a throwaway in-memory MongoDB (first run downloads it)
+npm test          # 52 tests; starts a throwaway in-memory MongoDB (first run downloads it)
 npm run typecheck
 ```
 
