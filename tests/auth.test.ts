@@ -211,3 +211,56 @@ describe("audit log (B5)", () => {
     expect(JSON.stringify(res.body)).not.toContain(secret);
   });
 });
+
+describe("password reset link", () => {
+  it("admin sends a link; the person needs the link AND their authenticator code", async () => {
+    const app = await makeApp();
+    const { agent: admin } = await setUpUser(app, "admin@example.com", ["admin"]);
+    const { user, secret, agent: oldSession } = await setUpUser(app, "forgot@example.com", ["contributor"]);
+
+    const sent = await post(admin, `/api/admin/users/${user._id}/password-reset`);
+    expect(sent.status).toBe(200);
+    const mail = (app.mail as FakeMail).sent.at(-1)!;
+    expect(mail.subject).toBe("Choose a new password for the RNK Legalheads CMS");
+    const link = /http:\/\/localhost:3000\/admin\/reset\?token=\S+/.exec(mail.text)![0];
+    const token = tokenFrom(link);
+
+    const anon = request.agent(app.app);
+    expect((await anon.get(`/api/admin/reset?token=${token}`)).body).toEqual({ name: "Name forgot@example.com", email: "forgot@example.com", codeRequired: true });
+    expect((await post(anon, "/api/admin/reset", { token, password: "short", code: code(secret, 1) })).body.errors.password).toBe("Use at least 12 characters.");
+    expect((await post(anon, "/api/admin/reset", { token, password: "a brand new long password", code: "000000" })).body.errors.code).toContain("not correct");
+    expect((await post(anon, "/api/admin/reset", { token, password: "a brand new long password", code: code(secret, 1) })).status).toBe(200);
+
+    // Old sessions end; the link works once; the old password stops working; the new one works.
+    expect((await oldSession.get("/api/admin/auth/me")).status).toBe(401);
+    expect((await anon.get(`/api/admin/reset?token=${token}`)).status).toBe(410);
+    expect((await post(request.agent(app.app), "/api/admin/auth/login", { email: "forgot@example.com", password: PASSWORD })).status).toBe(401);
+    expect((await post(request.agent(app.app), "/api/admin/auth/login", { email: "forgot@example.com", password: "a brand new long password" })).body).toEqual({ step: "mfa" });
+    expect(await AuditEvent.countDocuments({ action: { $in: ["user.password_reset_sent", "auth.password_reset_completed"] } })).toBe(2);
+  });
+
+  it("clears a lockout, expires after an hour, and only admins can send it", async () => {
+    const app = await makeApp();
+    const { agent: admin } = await setUpUser(app, "admin@example.com", ["admin"]);
+    const { user, secret, agent: writer } = await setUpUser(app, "locked@example.com", ["contributor"]);
+    await User.updateOne({ _id: user._id }, { lockedUntil: new Date(Date.now() + 600_000) });
+    expect((await post(writer, `/api/admin/users/${user._id}/password-reset`)).status).toBe(403);
+
+    await post(admin, `/api/admin/users/${user._id}/password-reset`);
+    const token = tokenFrom(/http:\/\/\S+\/admin\/reset\?token=\S+/.exec((app.mail as FakeMail).sent.at(-1)!.text)![0]);
+    await post(request.agent(app.app), "/api/admin/reset", { token, password: "another long password here", code: code(secret, 1) });
+    expect((await User.findById(user._id).lean())?.lockedUntil).toBeUndefined();
+
+    await post(admin, `/api/admin/users/${user._id}/password-reset`);
+    const token2 = tokenFrom(/http:\/\/\S+\/admin\/reset\?token=\S+/.exec((app.mail as FakeMail).sent.at(-1)!.text)![0]);
+    await User.updateOne({ _id: user._id }, { "passwordReset.expiresAt": new Date(Date.now() - 1000) });
+    expect((await request(app.app).get(`/api/admin/reset?token=${token2}`)).status).toBe(410);
+  });
+
+  it("invited (not yet active) people get Resend invitation instead", async () => {
+    const app = await makeApp();
+    const { agent: admin } = await setUpUser(app, "admin@example.com", ["admin"]);
+    const invited = await User.create({ name: "New One", email: "new@example.com", roles: ["contributor"], status: "invited" });
+    expect((await post(admin, `/api/admin/users/${invited._id}/password-reset`)).status).toBe(409);
+  });
+});

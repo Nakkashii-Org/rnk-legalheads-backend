@@ -90,6 +90,23 @@ export async function findInvitedUser(raw: unknown) {
   return user;
 }
 
+// ---- Password reset (sent by an Administrator) ----
+
+export const RESET_TTL = 60 * MINUTE;
+
+export async function issuePasswordReset(userId: Types.ObjectId, config: Config) {
+  const token = newToken();
+  await User.updateOne({ _id: userId }, { passwordReset: { tokenHash: sha256(token), expiresAt: new Date(Date.now() + RESET_TTL) } });
+  return `${config.publicSiteUrl}/admin/reset?token=${token}`;
+}
+
+export async function findResetUser(raw: unknown) {
+  if (typeof raw !== "string" || !/^[A-Za-z0-9_-]{20,100}$/.test(raw)) return undefined;
+  const user = await User.findOne({ "passwordReset.tokenHash": sha256(raw) });
+  if (!user || user.status !== "active" || !user.passwordReset?.expiresAt || user.passwordReset.expiresAt <= new Date()) return undefined;
+  return user;
+}
+
 // ---- Audit ----
 
 export async function audit(action: string, fields: { actorId?: string; actorEmail?: string; target?: string; detail?: string } = {}) {

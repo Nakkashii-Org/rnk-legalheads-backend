@@ -25,6 +25,8 @@ export function adminRoutes(deps: Deps) {
   router.get("/admin/setup", rateLimitPerIp(30), auth.setupInfo);
   router.post("/admin/setup/password", rateLimitPerIp(20), auth.setupPassword);
   router.post("/admin/setup/verify", rateLimitPerIp(20), auth.setupVerify);
+  router.get("/admin/reset", rateLimitPerIp(30), auth.resetInfo);
+  router.post("/admin/reset", rateLimitPerIp(10), auth.resetPassword);
 
   // 2. Signed in
   router.use("/admin", requireAuth);
@@ -38,6 +40,7 @@ export function adminRoutes(deps: Deps) {
   router.patch("/admin/users/:id", admin, users.update);
   router.post("/admin/users/:id/reset-mfa", admin, users.resetMfa);
   router.post("/admin/users/:id/resend-invite", admin, users.resendInvite);
+  router.post("/admin/users/:id/password-reset", admin, users.sendPasswordReset);
   router.get("/admin/audit", admin, auditLog.list);
 
   // Any other /api/admin path (content editing arrives in phase C): signed-in users get 404.

@@ -3,8 +3,8 @@ import { Types } from "mongoose";
 import { logger, maskEmail } from "../lib/logger.js";
 import { Session } from "../models/Session.js";
 import { ROLES, User, type Role } from "../models/User.js";
-import { audit, issueInvite } from "../services/auth.js";
-import { inviteEmail } from "../services/templates.js";
+import { audit, issueInvite, issuePasswordReset } from "../services/auth.js";
+import { inviteEmail, passwordResetEmail } from "../services/templates.js";
 import type { Deps } from "../types.js";
 import { EMAIL_PATTERN } from "../validation/common.js";
 
@@ -111,6 +111,24 @@ export class UsersController {
     await Session.deleteMany({ userId: user._id });
     await audit("user.mfa_reset", { actorId: req.user!.id, actorEmail: req.user!.email, target: user.email });
     res.json({ user: view(user) });
+  };
+
+  /** POST /api/admin/users/:id/password-reset → emails a one-hour link to choose a new password. */
+  sendPasswordReset = async (req: Request, res: Response) => {
+    if (!Types.ObjectId.isValid(String(req.params.id))) return void res.status(404).json({ error: "not_found" });
+    const user = await User.findById(req.params.id);
+    if (!user) return void res.status(404).json({ error: "not_found" });
+    if (user.status !== "active") return void res.status(409).json({ error: "not_active", message: "Only active accounts can reset a password. Use Resend invitation for invited people." });
+    const link = await issuePasswordReset(user._id, this.deps.config);
+    let emailed = true;
+    try {
+      await this.deps.mail.sendEmail(passwordResetEmail({ to: user.email, name: user.name, sentBy: req.user!.name, link }));
+    } catch (error) {
+      emailed = false;
+      logger.error("users.password_reset_email_failed", { to: maskEmail(user.email), error: (error as Error).name });
+    }
+    await audit("user.password_reset_sent", { actorId: req.user!.id, actorEmail: req.user!.email, target: user.email });
+    res.json({ user: view(user), emailed });
   };
 
   /** POST /api/admin/users/:id/resend-invite → a new link (the old one stops working). */

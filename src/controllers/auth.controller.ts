@@ -13,6 +13,7 @@ import {
   clearSessionCookie,
   createSession,
   findInvitedUser,
+  findResetUser,
   findSession,
   readSecret,
   readSessionToken,
@@ -139,6 +140,48 @@ export class AuthController {
   /** GET /api/admin/auth/me → the signed-in user (requireAuth has already checked the session). */
   me = (req: Request, res: Response) => {
     res.json({ user: req.user, sessionHours: SESSION_TTL / 3_600_000 });
+  };
+
+  // ---- Password reset link (sent by an Administrator) ----
+
+  /** GET /api/admin/reset?token= → who the link is for, and whether a 6-digit code is needed. */
+  resetInfo = async (req: Request, res: Response) => {
+    const user = await findResetUser(req.query.token);
+    if (!user) return void res.status(410).json({ error: "link_expired" });
+    res.json({ name: user.name, email: user.email, codeRequired: Boolean(user.mfa?.enabled) });
+  };
+
+  /**
+   * POST /api/admin/reset { token, password, code } → new password. The link alone isn't enough:
+   * the person's authenticator code is also required, so a stolen mailbox can't take over the account.
+   */
+  resetPassword = async (req: Request, res: Response) => {
+    const user = await findResetUser(body(req).token);
+    if (!user) return void res.status(410).json({ error: "link_expired" });
+
+    const password = str(body(req).password);
+    const problem = passwordProblem(password, user.email);
+    if (problem) return void res.status(422).json({ errors: { password: problem } });
+
+    let step: number | undefined;
+    if (user.mfa?.enabled && user.mfa.secret) {
+      step = verifyTotp(readSecret(user.mfa.secret, this.deps.config), str(body(req).code).trim(), user.mfa.lastUsedStep ?? -1);
+      if (step === undefined) {
+        await audit("auth.password_reset_code_failed", { actorId: String(user._id), actorEmail: user.email });
+        return void res.status(422).json({ errors: { code: "That code is not correct or has already been used. Wait for the next code and try again." } });
+      }
+    }
+
+    user.passwordHash = await hashPassword(password);
+    user.set("passwordReset", undefined);
+    user.failedLogins = 0;
+    user.lockedUntil = undefined;
+    if (step !== undefined) user.set("mfa.lastUsedStep", step);
+    await user.save();
+    // Any session opened with the old password ends.
+    await Session.deleteMany({ userId: user._id });
+    await audit("auth.password_reset_completed", { actorId: String(user._id), actorEmail: user.email });
+    res.json({ ok: true });
   };
 
   // ---- First-time setup from the invitation link ----

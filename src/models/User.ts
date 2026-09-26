@@ -30,6 +30,11 @@ const userSchema = new Schema(
       tokenHash: { type: String, index: true, sparse: true },
       expiresAt: Date,
     },
+    /** One-hour link an Administrator sends when an active user forgets their password. */
+    passwordReset: {
+      tokenHash: { type: String, index: true, sparse: true },
+      expiresAt: Date,
+    },
     lastLoginAt: Date,
     createdBy: String,
   },

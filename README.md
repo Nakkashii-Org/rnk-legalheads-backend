@@ -155,7 +155,8 @@ Publisher and Administrator, and the server checks them on every request.
 | `POST /api/admin/auth/logout`, `/logout-all` | signed in | Ends this session / every session of the user |
 | `GET /api/admin/auth/me` | signed in | The signed-in user and roles |
 | `GET /api/admin/setup?token=`, `POST /api/admin/setup/password`, `/setup/verify` | invitation link | Choose a password, scan the QR code, confirm the first code, and you're signed in |
-| `GET/POST /api/admin/users`, `PATCH /users/:id`, `POST /users/:id/reset-mfa`, `/resend-invite` | Administrator | List, invite (by email through Brevo), change roles, disable or enable, reset 2-step, resend invitation |
+| `GET/POST /api/admin/users`, `PATCH /users/:id`, `POST /users/:id/reset-mfa`, `/resend-invite`, `/password-reset` | Administrator | List, invite (by email through Brevo), change roles, disable or enable, reset 2-step, resend invitation, send a password reset link |
+| `GET /api/admin/reset?token=`, `POST /api/admin/reset` `{token, password, code}` | reset link | New password; needs the authenticator code too; ends all sessions; link valid 1 hour, works once |
 | `GET /api/admin/audit?page=` | Administrator | Audit log, newest first |
 
 **Security:**
@@ -206,7 +207,7 @@ and the confirm link is printed, so the whole newsletter flow can be tried local
 ## Tests
 
 ```bash
-npm test          # 65 tests; starts a throwaway in-memory MongoDB (first run downloads it)
+npm test          # 68 tests; starts a throwaway in-memory MongoDB (first run downloads it)
 npm run typecheck
 ```
 
