@@ -167,6 +167,9 @@ Publisher and Administrator, and the server checks them on every request.
 | `DELETE /api/admin/content/{type}/{id}` | creator or Administrator | Only never-published drafts that no other record links to |
 | `GET /api/admin/content/{type}/{id}/revisions` | signed in | Saved revisions, newest first (full copies are kept in `revisions`) |
 | `GET /api/admin/preview-bundle` | signed in | Website content including drafts, for the staff-only preview (never cached) |
+| `GET /api/admin/media?q=`, `POST /api/admin/media` (multipart `files` + `meta[i]`) | signed in | Media library: list with where each image is used; upload up to 10 images (JPG/PNG/WebP/AVIF by their real bytes, 10 MB each) with title, alt text, credit and licence |
+| `PATCH /api/admin/media/{id}`, `DELETE /api/admin/media/{id}` | signed in / uploader or Administrator | Edit details (alt text follows everywhere the image is used); delete only when nothing uses it |
+| `GET /api/admin/settings`, `PATCH /api/admin/settings` | Administrator | Firm details and footer text shown across the website; the audit log lists changed fields |
 
 **Security:**
 - Passwords are Argon2id hashes: at least 12 characters, not common, not containing the email.

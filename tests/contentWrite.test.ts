@@ -6,7 +6,7 @@ import { Revision } from "../src/models/Revision.js";
 import { Publication } from "../src/models/content/Publication.js";
 import { Service } from "../src/models/content/Service.js";
 import { seedContent } from "../src/scripts/seed-content.js";
-import { htmlToBlocks } from "../src/services/contentWrite.js";
+import { htmlToBlocks, parseRichText, SAFE_LINK } from "../src/services/contentWrite.js";
 import { clearDb, makeApp, ORIGIN, signedInAgent as signIn, startDb, stopDb } from "./helpers.js";
 
 // Writes need the site Origin header (requireOrigin), so every agent sends it.
@@ -41,9 +41,44 @@ describe("CMS writing (C2)", () => {
   it("converts editor HTML to safe plain-text blocks", () => {
     expect(htmlToBlocks(article.body)).toEqual([
       { kind: "h2", text: "Overview" },
-      { kind: "p", text: "First & main point." },
+      { kind: "p", text: "First & main point.", rich: [{ text: "First & " }, { text: "main", bold: true }, { text: " point." }] },
       { kind: "ul", items: ["One", "Two"] },
     ]);
+  });
+
+  it("keeps bold, italic, safe links and numbered lists as data, never as HTML", () => {
+    const html =
+      '<p>Read <b>the rule</b> and <i>the <a href="https://example.gov.in/x?a=1&amp;b=2">notice</a></i>.</p>' +
+      '<ol><li>First</li><li><strong>Second</strong></li></ol>' +
+      '<p><a href="javascript:alert(1)">bad</a> <a href="/contact" onclick="x()">contact</a> <span style="color:red">plain</span></p>';
+    const { blocks, badLinks } = parseRichText(html);
+    expect(blocks).toEqual([
+      {
+        kind: "p",
+        text: "Read the rule and the notice.",
+        rich: [
+          { text: "Read " },
+          { text: "the rule", bold: true },
+          { text: " and " },
+          { text: "the ", italic: true },
+          { text: "notice", italic: true, href: "https://example.gov.in/x?a=1&b=2" },
+          { text: "." },
+        ],
+      },
+      { kind: "ol", items: ["First", "Second"], richItems: [[{ text: "First" }], [{ text: "Second", bold: true }]] },
+      { kind: "p", text: "bad contact plain", rich: [{ text: "bad " }, { text: "contact", href: "/contact" }, { text: " plain" }] },
+    ]);
+    expect(badLinks).toEqual(["javascript:alert(1)"]);
+    for (const bad of ["http://x.com", "//evil.example", "/\\evil.example", "data:text/html,x"]) expect(SAFE_LINK.test(bad)).toBe(false);
+    for (const good of ["https://indiankanoon.org/doc/1", "mailto:a@b.co", "/services/arbitration"]) expect(SAFE_LINK.test(good)).toBe(true);
+  });
+
+  it("refuses to save text with unsafe links", async () => {
+    const app = await makeApp();
+    const agent = await signedInAgent(app, "writer@example.com", ["contributor"]);
+    const res = await agent.post("/api/admin/content/articles").send({ values: { ...article, body: '<p><a href="javascript:alert(1)">x</a></p>' } });
+    expect(res.status).toBe(422);
+    expect(res.body.errors.body).toContain("https://");
   });
 
   it("keeps headings and lists apart when the browser nests them", () => {

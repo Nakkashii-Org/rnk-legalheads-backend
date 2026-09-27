@@ -3,6 +3,7 @@ import { createApp } from "./app.js";
 import { ConfigError, loadConfig } from "./config.js";
 import { logger } from "./lib/logger.js";
 import { createMailProvider } from "./services/mail.js";
+import { createImageStorage } from "./services/images.js";
 import { createStorage } from "./services/storage.js";
 
 async function main() {
@@ -10,7 +11,7 @@ async function main() {
   await mongoose.connect(config.mongoUri, { serverSelectionTimeoutMS: 10_000 });
   logger.info("db.connected");
 
-  const app = createApp({ config, mail: createMailProvider(config), storage: createStorage(config) });
+  const app = createApp({ config, mail: createMailProvider(config), storage: createStorage(config), images: createImageStorage(config) });
   const server = app.listen(config.port, "0.0.0.0", () =>
     logger.info("server.started", { port: config.port, env: config.env, mail: config.mail.transport, storage: config.storage.driver }),
   );

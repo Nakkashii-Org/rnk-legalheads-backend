@@ -4,14 +4,19 @@ import { schemaOptions, slugField, workflowFields } from "./common.js";
 export const PUBLICATION_TYPES = ["article", "judgment", "update"] as const;
 
 /**
- * Body blocks: headings, paragraphs and lists as plain text, so nothing needs HTML sanitising on
- * the website. The CMS editor (phase C) converts its rich text into these blocks.
+ * Body blocks: headings, paragraphs and lists. `text`/`items` hold plain text; `rich`/`richItems`
+ * add bold, italic and checked links as data (never HTML), so nothing needs sanitising on the website.
  */
+const spanSchema = new Schema({ text: { type: String, required: true }, bold: Boolean, italic: Boolean, href: String }, { _id: false });
+
 const bodyBlockSchema = new Schema(
   {
-    kind: { type: String, enum: ["h2", "h3", "p", "ul"], required: true },
+    kind: { type: String, enum: ["h2", "h3", "p", "ul", "ol"], required: true },
     text: String,
     items: { type: [String], default: undefined },
+    rich: { type: [spanSchema], default: undefined },
+    /** One list of runs per item (only when a list item has formatting). */
+    richItems: { type: Schema.Types.Mixed, default: undefined },
   },
   { _id: false },
 );
@@ -35,6 +40,8 @@ const publicationSchema = new Schema(
     serviceIds: { type: [String], default: [] },
     body: { type: [bodyBlockSchema], default: [] },
     sources: { type: [sourceSchema], default: [] },
+    /** Optional image from the media library (sharing previews). */
+    image: { src: String, alt: String, mediaId: String },
 
     // Judgment note
     caseName: String,

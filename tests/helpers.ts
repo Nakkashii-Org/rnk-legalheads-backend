@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { createApp } from "../src/app.js";
 import { loadConfig } from "../src/config.js";
 import { LogProvider, ProviderError, type EmailMessage } from "../src/services/mail.js";
+import { LocalImages } from "../src/services/images.js";
 import { LocalStorage } from "../src/services/storage.js";
 
 export const ORIGIN = "http://localhost:3000";
@@ -53,8 +54,10 @@ export async function clearDb() {
 export async function makeApp(env: Record<string, string> = {}) {
   const config = loadConfig({ NODE_ENV: "test", PUBLIC_SITE_URL: ORIGIN, TRUST_PROXY: "0", ...env });
   const mail = new FakeMail();
-  const storage = new FakeStorage(await mkdtemp(path.join(tmpdir(), "rnk-test-")));
-  return { app: createApp({ config, mail, storage }), mail, storage, config };
+  const dir = await mkdtemp(path.join(tmpdir(), "rnk-test-"));
+  const storage = new FakeStorage(dir);
+  const images = new LocalImages(path.join(dir, "media"));
+  return { app: createApp({ config, mail, storage, images }), mail, storage, images, config };
 }
 
 /** A signed-in agent (password + 6-digit code done) for a new active user with the given roles. */

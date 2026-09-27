@@ -3,6 +3,9 @@ import { AdminContentController } from "../controllers/adminContent.controller.j
 import { AuditController } from "../controllers/audit.controller.js";
 import { AuthController } from "../controllers/auth.controller.js";
 import { ContentWriteController } from "../controllers/contentWrite.controller.js";
+import { MediaController } from "../controllers/media.controller.js";
+import { SettingsController } from "../controllers/settings.controller.js";
+import { receiveImages } from "../middlewares/upload.js";
 import { UsersController } from "../controllers/users.controller.js";
 import { requireAuth, requireRole } from "../middlewares/auth.js";
 import { rateLimitPerIp } from "../middlewares/security.js";
@@ -20,6 +23,8 @@ export function adminRoutes(deps: Deps) {
   const auditLog = new AuditController();
   const content = new AdminContentController();
   const write = new ContentWriteController();
+  const media = new MediaController(deps.images);
+  const settings = new SettingsController();
   const router = Router();
 
   // 1. No session needed
@@ -49,6 +54,11 @@ export function adminRoutes(deps: Deps) {
   router.delete("/admin/content/:type/:id", write.remove);
   router.get("/admin/content/:type/:id/revisions", write.revisions);
   router.get("/admin/preview-bundle", write.previewBundle);
+  // Media library (C4): every signed-in role
+  router.get("/admin/media", media.list);
+  router.post("/admin/media", receiveImages, media.upload);
+  router.patch("/admin/media/:id", media.update);
+  router.delete("/admin/media/:id", media.remove);
 
   // 3. Administrators only
   const admin = requireRole("admin");
@@ -59,6 +69,9 @@ export function adminRoutes(deps: Deps) {
   router.post("/admin/users/:id/resend-invite", admin, users.resendInvite);
   router.post("/admin/users/:id/password-reset", admin, users.sendPasswordReset);
   router.get("/admin/audit", admin, auditLog.list);
+  // Site settings (C5)
+  router.get("/admin/settings", admin, settings.get);
+  router.patch("/admin/settings", admin, settings.update);
 
   // Any other /api/admin path (content editing arrives in phase C): signed-in users get 404.
   router.use("/admin", (_req, res) => {

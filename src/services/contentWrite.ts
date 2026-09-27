@@ -1,6 +1,7 @@
 import { Person } from "../models/content/Person.js";
 import { Publication } from "../models/content/Publication.js";
 import { Service } from "../models/content/Service.js";
+import { Media } from "../models/Media.js";
 
 /**
  * Turns the CMS editor's field values into database records (C2), with the same rules as the
@@ -23,74 +24,131 @@ const bool = (v: unknown) => v === true;
 const strList = (v: unknown) => (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string").map((x) => x.trim()).filter(Boolean) : []);
 const opt = (v: string) => v || undefined;
 
-// ---- Rich text → plain-text blocks (safe by construction: no HTML is ever stored) ----
+// ---- Rich text → blocks (safe by construction: no HTML is ever stored) ----
 
-export type Block = { kind: "h2" | "h3" | "p" | "ul"; text?: string; items?: string[] };
+/** A run of text with its formatting. Links are only https://, mailto: or a path on this site. */
+export type Span = { text: string; bold?: true; italic?: true; href?: string };
+/**
+ * `text` / `items` always hold the plain text (search, reading time, contents list). `rich` /
+ * `richItems` are added only when the block has bold, italic or links.
+ */
+export type Block = { kind: "h2" | "h3" | "p" | "ul" | "ol"; text?: string; items?: string[]; rich?: Span[]; richItems?: Span[][] };
 
-function decode(text: string): string {
+export const SAFE_LINK = /^(https:\/\/[^\s<>"]+\.[^\s<>"]+|mailto:[^\s<>"@]+@[^\s<>"]+\.[^\s<>"]+|\/(?![/\\])[^\s<>"\\]*)$/i;
+
+function entities(text: string): string {
   return text
-    .replace(/<br\s*\/?>/gi, " ")
-    .replace(/<[^>]*>/g, "")
     .replace(/&nbsp;/g, " ")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, "&")
+    .replace(/&amp;/g, "&");
+}
+
+function decode(text: string): string {
+  return entities(text.replace(/<br\s*\/?>/gi, " ").replace(/<[^>]*>/g, ""))
     .replace(/\s+/g, " ")
     .trim();
 }
 
-/**
- * Headings, paragraphs and lists from the editor's HTML. Scripts, styles and attributes are dropped.
- * Read tag by tag, because browsers nest blocks freely (a list inside a paragraph, a heading
- * inside a div); nested lists are flattened into their outer list.
- */
-export function htmlToBlocks(html: string): Block[] {
-  const clean = html.replace(/<(script|style)[\s\S]*?<\/\1>/gi, "");
-  const blocks: Block[] = [];
-  let text = "";
-  let heading: "h2" | "h3" | null = null;
-  let listDepth = 0;
-  let items: string[] = [];
+/** Collapses white space across runs, merges runs with the same formatting, drops empty ones. */
+function tidy(spans: Span[]): Span[] {
+  const out: Span[] = [];
+  for (const s of spans) {
+    let text = s.text.replace(/\s+/g, " ");
+    const prev = out[out.length - 1];
+    if (!prev || prev.text.endsWith(" ")) text = text.replace(/^ /, "");
+    if (!text) continue;
+    if (prev && prev.bold === s.bold && prev.italic === s.italic && prev.href === s.href) prev.text += text;
+    else out.push({ text, ...(s.bold && { bold: true as const }), ...(s.italic && { italic: true as const }), ...(s.href && { href: s.href }) });
+  }
+  while (out.length) {
+    const last = out[out.length - 1]!;
+    last.text = last.text.replace(/ $/, "");
+    if (last.text) break;
+    out.pop();
+  }
+  return out;
+}
 
-  const flushText = () => {
-    const t = decode(text);
-    text = "";
-    if (!t) return;
-    if (heading) blocks.push({ kind: heading, text: t });
-    else if (listDepth > 0) items.push(t);
-    else blocks.push({ kind: "p", text: t });
+const plain = (spans: Span[]) => spans.map((s) => s.text).join("");
+const formatted = (spans: Span[]) => spans.some((s) => s.bold || s.italic || s.href);
+
+/**
+ * Headings, paragraphs, bulleted and numbered lists, bold, italic and links from the editor's
+ * HTML. Everything else (scripts, styles, attributes, images) is dropped. Read tag by tag, because
+ * browsers nest blocks freely (a list inside a paragraph, a heading inside a div); nested lists
+ * are flattened into their outer list. Links that aren't https://, mailto: or a site path are
+ * reported in `badLinks` and kept as plain text.
+ */
+export function parseRichText(html: string): { blocks: Block[]; badLinks: string[] } {
+  const clean = html.replace(/<(script|style)[\s\S]*?<\/\1>/gi, "").replace(/<!--[\s\S]*?-->/g, "");
+  const blocks: Block[] = [];
+  const badLinks: string[] = [];
+  let spans: Span[] = [];
+  let heading: "h2" | "h3" | null = null;
+  let list: "ul" | "ol" | null = null;
+  let listDepth = 0;
+  let items: Span[][] = [];
+  let bold = 0;
+  let italic = 0;
+  const links: (string | undefined)[] = [];
+
+  const flush = () => {
+    const runs = tidy(spans);
+    spans = [];
+    if (!runs.length) return;
+    if (heading) blocks.push({ kind: heading, text: plain(runs) });
+    else if (listDepth > 0) items.push(runs);
+    else blocks.push({ kind: "p", text: plain(runs), ...(formatted(runs) && { rich: runs }) });
+  };
+  const endList = () => {
+    if (items.length)
+      blocks.push({ kind: list ?? "ul", items: items.map(plain), ...(items.some(formatted) && { richItems: items }) });
+    items = [];
+    list = null;
   };
 
-  for (const m of clean.matchAll(/<(\/?)([a-z][a-z0-9]*)\b[^>]*>|[^<]+|</gi)) {
+  for (const m of clean.matchAll(/<(\/?)([a-z][a-z0-9]*)\b([^>]*)>|[^<]+|</gi)) {
     const tag = m[2]?.toLowerCase();
     if (!tag) {
-      text += m[0];
+      const href = links.findLast((l) => l !== undefined);
+      spans.push({ text: entities(m[0]), ...(bold && { bold: true }), ...(italic && { italic: true }), ...(href && { href }) });
       continue;
     }
     const closing = m[1] === "/";
     if (/^h[1-6]$/.test(tag)) {
-      flushText();
+      flush();
       heading = closing ? null : tag === "h1" || tag === "h2" ? "h2" : "h3";
     } else if (tag === "ul" || tag === "ol") {
-      flushText();
-      if (!closing) listDepth++;
-      else if (listDepth > 0 && --listDepth === 0) {
-        if (items.length) blocks.push({ kind: "ul", items });
-        items = [];
-      }
+      flush();
+      if (!closing) {
+        if (listDepth++ === 0) list = tag;
+      } else if (listDepth > 0 && --listDepth === 0) endList();
     } else if (["li", "p", "div", "blockquote", "br", "section", "article"].includes(tag)) {
-      flushText();
+      flush();
+    } else if (tag === "b" || tag === "strong") bold = Math.max(0, bold + (closing ? -1 : 1));
+    else if (tag === "i" || tag === "em") italic = Math.max(0, italic + (closing ? -1 : 1));
+    else if (tag === "a") {
+      if (closing) links.pop();
+      else {
+        const raw = /\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i.exec(m[3] ?? "");
+        const href = raw ? entities(raw[1] ?? raw[2] ?? raw[3] ?? "").trim() : "";
+        if (href && !SAFE_LINK.test(href)) badLinks.push(href);
+        links.push(href && SAFE_LINK.test(href) ? href : undefined);
+      }
     }
-    // Inline tags (b, i, a, span…) are dropped; their text is kept.
+    // Other inline tags (span, u, font…) are dropped; their text is kept.
   }
-  flushText();
-  if (items.length) blocks.push({ kind: "ul", items });
-  return blocks;
+  flush();
+  if (listDepth > 0 || items.length) endList();
+  return { blocks, badLinks };
 }
 
-const blocksText = (blocks: Block[]) => blocks.map((b) => (b.kind === "ul" ? (b.items ?? []).join(" ") : b.text)).join(" ");
+export const htmlToBlocks = (html: string): Block[] => parseRichText(html).blocks;
+
+const blocksText = (blocks: Block[]) => blocks.map((b) => (b.items ? b.items.join(" ") : b.text)).join(" ");
 
 // ---- Per-type mapping ----
 
@@ -124,6 +182,19 @@ function checkUrl(v: string, field: string, errors: FieldErrors) {
   if (v && !URL_RE.test(v)) errors[field] = "Enter a full link starting with https://";
 }
 
+/** An image chosen in the editor (a media-library id) → the stored {src, alt, mediaId}. */
+async function imageFrom(value: unknown, field: string, errors: FieldErrors, needsAlt = false) {
+  const id = str(value);
+  if (!id) return undefined;
+  const media = /^[a-f0-9]{24}$/.test(id) ? await Media.findById(id, { url: 1, alt: 1, decorative: 1 }).lean<{ url: string; alt: string; decorative: boolean }>() : null;
+  if (!media) {
+    errors[field] = "The chosen image no longer exists. Choose another.";
+    return undefined;
+  }
+  if (needsAlt && media.decorative) errors[field] = "A portrait needs alt text. Edit the image in the media library.";
+  return { src: media.url, alt: media.alt, mediaId: id };
+}
+
 const workAreas = (v: unknown) =>
   (Array.isArray(v) ? v : []).map((w) => ({ title: str((w as Values)?.title), text: str((w as Values)?.text) })).filter((w) => w.title || w.text);
 
@@ -133,7 +204,8 @@ async function publicationDoc(type: "article" | "judgment" | "update", v: Values
   checkLength(summary, 240, "summary", "Summary", errors);
   const html = typeof v.body === "string" ? v.body : "";
   if (html.length > 100_000) errors.body = "The article is too long to save.";
-  const body = htmlToBlocks(html);
+  const { blocks: body, badLinks } = parseRichText(html);
+  if (badLinks.length) errors.body = "Links in the text must start with https:// (or mailto: for an email address).";
 
   const authorSlug = strList(v.author)[0];
   let authorName = "";
@@ -165,6 +237,7 @@ async function publicationDoc(type: "article" | "judgment" | "update", v: Values
     sources: sources.map((s) => ({ label: s.label || s.url, url: opt(s.url) })),
     seoTitle: opt(seoTitle),
     seoDescription: opt(seoDescription),
+    image: await imageFrom(v.image, "image", errors),
   };
   if (type === "judgment") {
     const decisionDate = str(v.decisionDate);
@@ -290,7 +363,7 @@ export const RULES: Record<string, TypeRules> = {
       const practiceSummary = str(v.practiceSummary);
       checkLength(practiceSummary, 200, "practiceSummary", "Practice summary", errors);
       const biography = htmlToBlocks(typeof v.biography === "string" ? v.biography : "")
-        .map((b) => (b.kind === "ul" ? (b.items ?? []).join("; ") : b.text!))
+        .map((b) => (b.items ? b.items.join("; ") : b.text!))
         .filter(Boolean);
       const serviceIds = strList(v.services);
       await checkServices(serviceIds, "services", errors);
@@ -306,6 +379,7 @@ export const RULES: Record<string, TypeRules> = {
           languages: opt(str(v.languages)),
           office: opt(str(v.office)),
           portraitConsent: bool(v.portraitConsent),
+          portrait: await imageFrom(v.portrait, "portrait", errors, true),
           serviceIds,
         },
         errors,
@@ -403,6 +477,8 @@ export function reviewProblems(type: string, v: Values): FieldErrors {
     if (empty) errors[field] = field === "scope" ? "Complete every scope of work entry." : `${label} is required.`;
   }
   if (type === "services" && Array.isArray(v.scope) && v.scope.length !== 6 && !errors.scope) errors.scope = "A service needs exactly 6 work areas.";
+  if (type === "people" && str(v.portrait) && v.portraitConsent !== true)
+    errors.portraitConsent = "Confirm that the lawyer has consented to this portrait being published.";
   if (rules.sourceCheck && v.sourceChecked !== true) errors.sourceChecked = "Confirm that the primary source has been checked.";
   return errors;
 }

@@ -9,6 +9,7 @@ import { Person } from "../models/content/Person.js";
 import { Publication } from "../models/content/Publication.js";
 import { Service } from "../models/content/Service.js";
 import { Enquiry } from "../models/Enquiry.js";
+import { Media } from "../models/Media.js";
 
 type Rec = Record<string, any>;
 
@@ -130,16 +131,18 @@ export class AdminContentController {
 
   /** GET /api/admin/options → choices for the editors' pickers (every status, so drafts can be linked). */
   options = async (_req: Request, res: Response) => {
-    const [services, people, publications] = await Promise.all([
+    const [services, people, publications, media] = await Promise.all([
       Service.find({ status: { $ne: "archived" } }, { serviceId: 1, title: 1 }).sort({ serviceId: 1 }).lean<Rec[]>(),
       Person.find({ status: { $ne: "archived" } }, { slug: 1, name: 1 }).sort({ name: 1 }).lean<Rec[]>(),
       Publication.find({ status: { $ne: "archived" } }, { type: 1, slug: 1, title: 1, status: 1 }).sort({ updatedAt: -1 }).lean<Rec[]>(),
+      Media.find({}, { title: 1, url: 1, alt: 1, decorative: 1 }).sort({ createdAt: -1 }).limit(500).lean<Rec[]>(),
     ]);
     const label: Rec = { article: "Article", judgment: "Judgment note", update: "Legal update" };
     res.json({
       services: services.map((s) => ({ value: s.serviceId, label: s.title })),
       people: people.map((p) => ({ value: p.slug, label: p.name })),
       publications: publications.map((p) => ({ value: `${p.type}:${p.slug}`, label: `${label[p.type]}: ${p.title}`, status: p.status })),
+      media: media.map((m) => ({ value: String(m._id), label: m.title, url: m.url, alt: m.alt, decorative: m.decorative })),
     });
   };
 }

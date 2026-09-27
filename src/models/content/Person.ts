@@ -15,7 +15,8 @@ const personSchema = new Schema(
     languages: String,
     office: String,
     serviceIds: { type: [String], default: [] },
-    portrait: { src: String, alt: String },
+    /** Chosen from the media library; src and alt are copied from it (alt kept in step on edits). */
+    portrait: { src: String, alt: String, mediaId: String },
     /** The lawyer agreed to the portrait being published (guide p.148). */
     portraitConsent: { type: Boolean, default: false },
     ...workflowFields,
