@@ -106,11 +106,15 @@ include message bodies, resumes or tokens.
 
 ## Brevo setup (once)
 
-1. Verify the sending domain `rnklegalheads.com` (Brevo code, DKIM, SPF and DMARC DNS records).
-2. Create an API key → `BREVO_API_KEY`.
-3. Create 7 lists (Business, Disputes, Tax, Property, IP, People, Regulated) → `NEWSLETTER_LIST_IDS`.
-4. Create a double opt-in confirmation template → `DOI_TEMPLATE_ID`.
-5. Create the contact attribute `MANAGE_TOKEN` (text).
+1. Verify the sender address → `MAIL_FROM_EMAIL`; at launch, verify the domain `rnklegalheads.com` (Brevo code, DKIM, SPF and DMARC DNS records).
+2. Create an **API** key (not SMTP) → `BREVO_API_KEY`, `MAIL_TRANSPORT=brevo`.
+3. Security → Authorised IPs: deactivate IP blocking (Render has no fixed IP).
+4. Create 7 lists (Business, Disputes, Tax, Property, IP, People, Regulated) → `NEWSLETTER_LIST_IDS`.
+5. Create a double opt-in confirmation template → `DOI_TEMPLATE_ID`.
+6. Create the contact attribute `MANAGE_TOKEN` (text).
+7. Settings → Webhooks → Create outbound webhook: `https://<backend>/api/webhooks/brevo?token=<BREVO_WEBHOOK_SECRET>`, event category **Marketing email**, only **Hard Bounced, Complaint, Unsubscribed** on. Set `BREVO_WEBHOOK_SECRET` on Render and redeploy.
+
+The step-by-step version, with screens and checks, is in `RNK_Website_Steps_and_Test_Links.md` → "Brevo: complete setup".
 
 ## Website content (phase A)
 
@@ -174,6 +178,10 @@ Publisher and Administrator, and the server checks them on every request.
 | `POST /api/admin/content/{type}/{id}/restore` | creator or Administrator | Archived → draft |
 | `POST /api/admin/content/newsletters/{id}/email-draft` | Publisher or Administrator | Draft campaign in Brevo for a published issue (never sent automatically) |
 | `POST /api/webhooks/brevo?token=BREVO_WEBHOOK_SECRET` | Brevo | Unsubscribes, hard bounces and spam complaints → consent history |
+| `GET /api/admin/inbox/{enquiries\|applications}?status=&position=&q=&page=`, `GET …/{reference}` | Publisher or Administrator | Inbox lists (newest first, counts per status) and one full record with internal notes |
+| `PATCH /api/admin/inbox/{kind}/{reference}` `{status?, note?}` | Publisher or Administrator | Status change and/or an internal note (audited) |
+| `GET /api/admin/inbox/applications/{reference}/resume` | Publisher or Administrator | The resume file itself, after the sign-in check; audited; no public link |
+| `DELETE /api/admin/inbox/{kind}/{reference}` | Administrator | Permanent deletion (retention); an application's resume file is deleted too |
 | `GET /api/admin/settings`, `PATCH /api/admin/settings` | Administrator | Firm details and footer text shown across the website; the audit log lists changed fields |
 
 **Security:**

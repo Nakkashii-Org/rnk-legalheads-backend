@@ -34,6 +34,42 @@ describe("CloudinaryStorage", () => {
     expect(await (form!.get("file") as Blob).text()).toBe("%PDF-1.4 test");
   });
 
+  it("downloads a resume through the signed private-download API, valid for 60 seconds", async () => {
+    let url = "";
+    const fakeFetch = (async (u: string) => {
+      url = u;
+      return new Response("%PDF-1.4 test", { status: 200 });
+    }) as unknown as typeof fetch;
+    const storage = new CloudinaryStorage({ cloudName: "rnkdemo", apiKey: "123456", apiSecret: "shh" }, fakeFetch);
+    const body = await storage.get("resumes/2026/09/RNK-TEST0001.pdf");
+    expect(body.toString()).toBe("%PDF-1.4 test");
+
+    const u = new URL(url);
+    expect(u.origin + u.pathname).toBe("https://api.cloudinary.com/v1_1/rnkdemo/raw/download");
+    const q = Object.fromEntries(u.searchParams);
+    expect(q).toMatchObject({ public_id: "resumes/2026/09/RNK-TEST0001.pdf", type: "authenticated", api_key: "123456" });
+    expect(Number(q.expires_at) - Number(q.timestamp)).toBe(60);
+    const signed = { public_id: q.public_id!, type: q.type!, timestamp: q.timestamp!, expires_at: q.expires_at! };
+    expect(q.signature).toBe(CloudinaryStorage.sign(signed, "shh"));
+    expect(url).not.toContain("shh");
+  });
+
+  it("deletes a resume (retention) with a signed request", async () => {
+    let url = "";
+    let form: FormData | undefined;
+    const fakeFetch = (async (u: string, init: RequestInit) => {
+      url = u;
+      form = init.body as FormData;
+      return new Response(JSON.stringify({ result: "ok" }), { status: 200 });
+    }) as unknown as typeof fetch;
+    const storage = new CloudinaryStorage({ cloudName: "rnkdemo", apiKey: "123456", apiSecret: "shh" }, fakeFetch);
+    await storage.remove("resumes/a.pdf");
+    expect(url).toBe("https://api.cloudinary.com/v1_1/rnkdemo/raw/destroy");
+    expect(form!.get("type")).toBe("authenticated");
+    const params = { public_id: "resumes/a.pdf", timestamp: String(form!.get("timestamp")), type: "authenticated", invalidate: "true" };
+    expect(form!.get("signature")).toBe(CloudinaryStorage.sign(params, "shh"));
+  });
+
   it("reports Cloudinary errors without the secret", async () => {
     const fakeFetch = (async () =>
       new Response(JSON.stringify({ error: { message: "Invalid Signature" } }), { status: 401 })) as unknown as typeof fetch;

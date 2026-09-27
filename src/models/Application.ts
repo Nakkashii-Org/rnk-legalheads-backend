@@ -1,5 +1,5 @@
 import { Schema, model, type InferSchemaType } from "mongoose";
-import { deliverySchema } from "./Enquiry.js";
+import { deliverySchema, noteSchema } from "./Enquiry.js";
 
 /**
  * Job application. The resume lives in private storage; only its key and metadata are kept here.
@@ -30,6 +30,7 @@ const applicationSchema = new Schema(
       sha256: { type: String, required: true },
     },
     status: { type: String, enum: ["new", "shortlisted", "rejected"], default: "new", index: true },
+    notes: { type: [noteSchema], default: [] },
     delivery: { type: deliverySchema, default: () => ({}) },
   },
   { timestamps: true },

@@ -3,6 +3,7 @@ import { AdminContentController } from "../controllers/adminContent.controller.j
 import { AuditController } from "../controllers/audit.controller.js";
 import { AuthController } from "../controllers/auth.controller.js";
 import { ContentWriteController } from "../controllers/contentWrite.controller.js";
+import { InboxController } from "../controllers/inbox.controller.js";
 import { MediaController } from "../controllers/media.controller.js";
 import { SettingsController } from "../controllers/settings.controller.js";
 import { WorkflowController } from "../controllers/workflow.controller.js";
@@ -27,6 +28,7 @@ export function adminRoutes(deps: Deps) {
   const media = new MediaController(deps.images);
   const settings = new SettingsController();
   const workflow = new WorkflowController(deps);
+  const inbox = new InboxController(deps);
   const router = Router();
 
   // 1. No session needed
@@ -45,6 +47,13 @@ export function adminRoutes(deps: Deps) {
   router.post("/admin/auth/logout-all", auth.logoutAll);
   // Reading content (C1): every signed-in role
   router.get("/admin/dashboard", content.dashboard);
+  // Inbox (phase E): enquiries and applications hold personal data, so Publishers and Administrators only
+  const inboxRole = requireRole("publisher");
+  router.get("/admin/inbox/:kind", inboxRole, inbox.list);
+  router.get("/admin/inbox/:kind/:reference", inboxRole, inbox.one);
+  router.patch("/admin/inbox/:kind/:reference", inboxRole, inbox.update);
+  router.get("/admin/inbox/:kind/:reference/resume", inboxRole, inbox.resume);
+  router.delete("/admin/inbox/:kind/:reference", requireRole("admin"), inbox.remove);
   router.get("/admin/options", content.options);
   router.get("/admin/content", content.across);
   router.get("/admin/content/:type", content.list);

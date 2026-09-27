@@ -11,7 +11,10 @@ export const deliverySchema = new Schema(
   { _id: false },
 );
 
-/** Contact form submission (guide p.136). Visible later in the CMS Enquiries inbox. */
+/** Internal note by a CMS user (never shown to the sender). Notes are only added, never edited. */
+export const noteSchema = new Schema({ text: { type: String, required: true, maxlength: 2000 }, by: { type: String, required: true }, at: { type: Date, required: true } }, { _id: false });
+
+/** Contact form submission (guide p.136). Handled in the CMS Enquiries inbox (phase E). */
 const enquirySchema = new Schema(
   {
     reference: { type: String, required: true, unique: true },
@@ -24,6 +27,7 @@ const enquirySchema = new Schema(
     context: { kind: { type: String, enum: ["person", "industry"] }, slug: String },
     acknowledged: { type: Boolean, required: true },
     status: { type: String, enum: ["new", "in-progress", "closed"], default: "new", index: true },
+    notes: { type: [noteSchema], default: [] },
     delivery: { type: deliverySchema, default: () => ({}) },
   },
   { timestamps: true },
