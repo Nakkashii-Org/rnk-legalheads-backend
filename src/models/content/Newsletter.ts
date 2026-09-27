@@ -16,7 +16,7 @@ const newsletterSchema = new Schema(
     focus: { type: String, default: "" },
     /** ISO date, assigned only to approved issues. */
     issueDate: String,
-    introduction: { type: String, required: true, maxlength: 1000 },
+    introduction: { type: String, default: "", maxlength: 1000 },
     contents: { type: [String], default: [] },
     /** Ordered references to publications. */
     items: { type: [itemSchema], default: [] },

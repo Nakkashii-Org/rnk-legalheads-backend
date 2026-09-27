@@ -16,10 +16,17 @@ export const workflowFields = {
   preview: { type: Boolean, default: false },
   /** Set when a revision is published (filled by the publishing workflow, phase D). */
   publishedRevisionAt: Date,
+  /** Email of the CMS user who created the record (absent for imported records). */
+  createdBy: String,
+  /** Email of the CMS user who saved it last. */
+  updatedBy: String,
+  /** Number of the latest saved revision (0 for imported records). */
+  revision: { type: Number, default: 0 },
 };
 
 export const slugField = { type: String, required: true, match: SLUG, maxlength: 100 };
 
-export const workAreaSchema = new Schema({ title: { type: String, required: true }, text: { type: String, required: true } }, { _id: false });
+// Drafts may hold half-written work areas; "Send for review" requires both parts.
+export const workAreaSchema = new Schema({ title: { type: String, default: "" }, text: { type: String, default: "" } }, { _id: false });
 
 export const schemaOptions = { timestamps: true, versionKey: false } as const;

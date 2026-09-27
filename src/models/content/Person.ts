@@ -6,8 +6,8 @@ const personSchema = new Schema(
   {
     slug: { ...slugField, unique: true },
     name: { type: String, required: true, maxlength: 120 },
-    role: { type: String, required: true, maxlength: 120 },
-    practiceSummary: { type: String, required: true, maxlength: 300 },
+    role: { type: String, default: "", maxlength: 120 },
+    practiceSummary: { type: String, default: "", maxlength: 300 },
     biography: { type: [String], default: [] },
     priorExperience: String,
     qualifications: String,

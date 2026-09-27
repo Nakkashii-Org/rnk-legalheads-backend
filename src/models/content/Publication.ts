@@ -27,8 +27,8 @@ const publicationSchema = new Schema(
     type: { type: String, enum: PUBLICATION_TYPES, required: true },
     slug: slugField,
     title: { type: String, required: true, maxlength: 200 },
-    summary: { type: String, required: true, maxlength: 400 },
-    author: { name: { type: String, required: true }, personSlug: String },
+    summary: { type: String, default: "", maxlength: 400 },
+    author: { name: { type: String, default: "" }, personSlug: String },
     /** Content dates, ISO YYYY-MM-DD (separate from the record's createdAt/updatedAt). */
     datePublished: String,
     dateUpdated: String,
@@ -55,6 +55,9 @@ const publicationSchema = new Schema(
     // Judgment and legal update
     officialSourceUrl: String,
     sourceCheckedAt: String,
+
+    seoTitle: { type: String, maxlength: 70 },
+    seoDescription: { type: String, maxlength: 170 },
 
     ...workflowFields,
   },

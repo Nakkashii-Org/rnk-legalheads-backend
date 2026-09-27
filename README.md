@@ -161,6 +161,12 @@ Publisher and Administrator, and the server checks them on every request.
 | `GET /api/admin/dashboard` | signed in | Counts by status; recent drafts; new enquiries/applications (Publisher and Administrator only) |
 | `GET /api/admin/content/{type}?status=&q=`, `/content/{type}/{id}`, `/content?status=` | signed in | CMS lists, one full record, records of every type with one status (review queue) |
 | `GET /api/admin/options` | signed in | Picker choices: services by id, people by slug, publications as type:slug |
+| `POST /api/admin/content/{type}` `{values}` | signed in | New draft (needs only a title and a unique slug); new services get the next service ID |
+| `PATCH /api/admin/content/{type}/{id}` `{values}` | signed in | Save draft as a new revision; an In-review record goes back to Draft; Approved/Published answer 409 until phase D |
+| `POST /api/admin/content/{type}/{id}/submit` `{values}` | signed in | Save and send for review after every required check (422 with field errors otherwise) |
+| `DELETE /api/admin/content/{type}/{id}` | creator or Administrator | Only never-published drafts that no other record links to |
+| `GET /api/admin/content/{type}/{id}/revisions` | signed in | Saved revisions, newest first (full copies are kept in `revisions`) |
+| `GET /api/admin/preview-bundle` | signed in | Website content including drafts, for the staff-only preview (never cached) |
 
 **Security:**
 - Passwords are Argon2id hashes: at least 12 characters, not common, not containing the email.

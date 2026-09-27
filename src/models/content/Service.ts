@@ -10,8 +10,8 @@ const serviceSchema = new Schema(
     serviceId: { type: String, required: true, unique: true, match: /^S\d{2,3}$/ },
     slug: { ...slugField, unique: true },
     title: { type: String, required: true, maxlength: 120 },
-    group: { type: String, enum: SERVICE_GROUPS, required: true },
-    summary: { type: String, required: true, maxlength: 300 },
+    group: { type: String, enum: SERVICE_GROUPS },
+    summary: { type: String, default: "", maxlength: 300 },
     overview: { type: String, default: "" },
     scope: { type: [workAreaSchema], default: [] },
     /** Related service ids, in display order. */
@@ -21,6 +21,10 @@ const serviceSchema = new Schema(
     /** Service register (internal, guide p.149). */
     owner: String,
     jurisdiction: String,
+    /** Lawyers for this service (people slugs). */
+    people: { type: [String], default: [] },
+    seoTitle: { type: String, maxlength: 70 },
+    seoDescription: { type: String, maxlength: 170 },
     ...workflowFields,
   },
   schemaOptions,

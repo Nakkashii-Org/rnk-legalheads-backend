@@ -4,17 +4,17 @@ import { schemaOptions, slugField, workflowFields } from "./common.js";
 /** Vacancy (guide p.137, p.150). */
 const jobSchema = new Schema(
   {
-    jobId: { type: String, required: true, unique: true, maxlength: 40 },
+    jobId: { type: String, unique: true, sparse: true, maxlength: 40 },
     slug: { ...slugField, unique: true },
     title: { type: String, required: true, maxlength: 120 },
-    practice: { type: String, required: true },
-    location: { type: String, required: true },
-    workArrangement: { type: String, required: true },
-    experience: { type: String, required: true },
-    summary: { type: String, required: true, maxlength: 400 },
+    practice: { type: String, default: "" },
+    location: { type: String, default: "" },
+    workArrangement: { type: String, default: "" },
+    experience: { type: String, default: "" },
+    summary: { type: String, default: "", maxlength: 400 },
     responsibilities: { type: [String], default: [] },
     qualifications: { type: [String], default: [] },
-    applicationInstructions: { type: String, required: true },
+    applicationInstructions: { type: String, default: "" },
     applicationEmail: String,
     /** ISO dates (YYYY-MM-DD). */
     openedOn: String,
