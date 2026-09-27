@@ -36,6 +36,8 @@ function row(type: string, d: Rec) {
     title: d[t.title] as string,
     status: d.status as string,
     preview: Boolean(d.preview),
+    /** A published copy is on the website (it may differ from the latest saved text). */
+    live: Boolean(d.live?.data) || d.status === "published",
     detail: t.detail(d),
     author: t.author?.(d),
     updatedAt: d.updatedAt,
@@ -44,7 +46,7 @@ function row(type: string, d: Rec) {
 
 /** Removes database internals before a record goes to the editor. */
 function forEditor(d: Rec) {
-  const { _id, createdAt, ...rest } = d;
+  const { _id, createdAt, live, ...rest } = d;
   return rest;
 }
 
@@ -77,7 +79,19 @@ export class AdminContentController {
     if (!t) return void res.status(404).json({ error: "not_found" });
     const doc = await t.model.findOne({ ...t.filter, slug: req.params.id }).lean<Rec>();
     if (!doc) return void res.status(404).json({ error: "not_found" });
-    res.json({ summary: row(type, doc), record: forEditor(doc) });
+    res.json({
+      summary: row(type, doc),
+      record: forEditor(doc),
+      // Review and publishing state for the editor and the reviewer view (phase D).
+      workflow: {
+        revision: doc.revision ?? 0,
+        createdBy: doc.createdBy,
+        updatedBy: doc.updatedBy,
+        approval: doc.approval?.revision ? doc.approval : undefined,
+        live: doc.live?.data ? { revision: doc.live.revision, by: doc.live.by, at: doc.live.at } : doc.status === "published" ? {} : undefined,
+        campaignId: doc.campaignId,
+      },
+    });
   };
 
   /** GET /api/admin/content?status= → matching records of every type (the review queue). */

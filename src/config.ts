@@ -12,6 +12,8 @@ export type Config = {
   trustProxy: number;
   /** Shared with the website's server so draft review mode can read drafts. Empty = drafts never served. */
   contentPreviewSecret: string;
+  /** Shared secret in the Brevo webhook URL (?token=). Empty: the webhook is switched off. */
+  brevoWebhookSecret: string;
   /** 32-byte key that encrypts 2-step verification secrets at rest. */
   mfaEncryptionKey: Buffer;
   mail: {
@@ -93,6 +95,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
 
   const previewSecret = env.CONTENT_PREVIEW_SECRET?.trim() ?? "";
   if (previewSecret && previewSecret.length < 24) problems.push("CONTENT_PREVIEW_SECRET must be at least 24 characters (or left empty)");
+  const webhookSecret = env.BREVO_WEBHOOK_SECRET?.trim() ?? "";
+  if (webhookSecret && webhookSecret.length < 24) problems.push("BREVO_WEBHOOK_SECRET must be at least 24 characters (or left empty)");
 
   // MFA_ENCRYPTION_KEY: 32 random bytes, base64. Required in production; a fixed key is used in development and tests.
   let mfaEncryptionKey = Buffer.from("0123456789abcdef0123456789abcdef");
@@ -117,6 +121,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
       .filter(Boolean),
     trustProxy: integer("TRUST_PROXY", 1),
     contentPreviewSecret: previewSecret,
+    brevoWebhookSecret: webhookSecret,
     mfaEncryptionKey,
     mail: {
       transport,

@@ -174,10 +174,10 @@ describe("CMS writing (C2)", () => {
     expect(s.body.errors.scope).toBe("A service needs exactly 6 work areas.");
   });
 
-  it("approved and published records can't be edited yet", async () => {
+  it("rejected (archived) records can't be edited until restored", async () => {
     const app = await makeApp();
     const agent = await signedInAgent(app, "admin@example.com", ["admin"]);
-    await Service.updateOne({ slug: "arbitration" }, { status: "published" });
+    await Service.updateOne({ slug: "arbitration" }, { status: "archived" });
     const res = await agent.patch("/api/admin/content/services/arbitration").send({ values: { title: "Arbitration", slug: "arbitration" } });
     expect(res.status).toBe(409);
     expect(res.body.error).toBe("locked");

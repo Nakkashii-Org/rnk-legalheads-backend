@@ -22,6 +22,13 @@ export const workflowFields = {
   updatedBy: String,
   /** Number of the latest saved revision (0 for imported records). */
   revision: { type: Number, default: 0 },
+  /** The revision a legal reviewer approved (cleared by any later save). */
+  approval: { revision: Number, by: String, at: Date },
+  /**
+   * What the website shows: a copy of the record taken when it was published. Editing a published
+   * record changes only the working fields; the website keeps this copy until the next publish.
+   */
+  live: { data: Schema.Types.Mixed, revision: Number, by: String, at: Date },
 };
 
 export const slugField = { type: String, required: true, match: SLUG, maxlength: 100 };

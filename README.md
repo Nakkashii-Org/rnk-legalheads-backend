@@ -169,6 +169,11 @@ Publisher and Administrator, and the server checks them on every request.
 | `GET /api/admin/preview-bundle` | signed in | Website content including drafts, for the staff-only preview (never cached) |
 | `GET /api/admin/media?q=`, `POST /api/admin/media` (multipart `files` + `meta[i]`) | signed in | Media library: list with where each image is used; upload up to 10 images (JPG/PNG/WebP/AVIF by their real bytes, 10 MB each) with title, alt text, credit and licence |
 | `PATCH /api/admin/media/{id}`, `DELETE /api/admin/media/{id}` | signed in / uploader or Administrator | Edit details (alt text follows everywhere the image is used); delete only when nothing uses it |
+| `POST /api/admin/content/{type}/{id}/approve` `{checklist: [6×true], comment?}`, `/request-changes` `{comment}`, `/reject` `{comment}` | Legal reviewer or Administrator | Review decisions; a reviewer can't approve their own revision; reject archives a never-published record |
+| `POST /api/admin/content/{type}/{id}/publish`, `/unpublish` | Publisher or Administrator | Publishing copies the approved revision to `live` (what the website shows); edits stay private until published again. Authors, and a newsletter's publications, must be live first |
+| `POST /api/admin/content/{type}/{id}/restore` | creator or Administrator | Archived → draft |
+| `POST /api/admin/content/newsletters/{id}/email-draft` | Publisher or Administrator | Draft campaign in Brevo for a published issue (never sent automatically) |
+| `POST /api/webhooks/brevo?token=BREVO_WEBHOOK_SECRET` | Brevo | Unsubscribes, hard bounces and spam complaints → consent history |
 | `GET /api/admin/settings`, `PATCH /api/admin/settings` | Administrator | Firm details and footer text shown across the website; the audit log lists changed fields |
 
 **Security:**

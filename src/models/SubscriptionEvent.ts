@@ -10,11 +10,13 @@ const subscriptionEventSchema = new Schema(
     email: { type: String, required: true, index: true },
     action: {
       type: String,
-      enum: ["subscribe_requested", "confirmed", "preferences_updated", "unsubscribed"],
+      enum: ["subscribe_requested", "confirmed", "preferences_updated", "unsubscribed", "bounced", "complained"],
       required: true,
     },
     /** Topics after this action (empty after unsubscribing). */
     topics: { type: [String], default: undefined },
+    /** Where the event came from: the website (default) or Brevo (webhook: unsubscribe link in a campaign, bounce, spam complaint). */
+    source: { type: String, enum: ["website", "brevo"], default: "website" },
     /** Privacy-notice version shown when consent was given (subscribe only). */
     noticeVersion: String,
     at: { type: Date, required: true, default: () => new Date(), index: true },

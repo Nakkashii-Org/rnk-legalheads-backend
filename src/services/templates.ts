@@ -172,3 +172,43 @@ export function passwordResetEmail(input: { to: string; name: string; sentBy: st
 </td></tr></table></body></html>`;
   return { to: [{ email: input.to, name: input.name }], subject: "Choose a new password for the RNK Legalheads CMS", text, html, tags: ["cms-invite", "cms-password-reset"] };
 }
+
+export const PUBLICATION_PATHS: Record<string, string> = { article: "/articles", judgment: "/recent-judgments", update: "/legal-updates" };
+
+/**
+ * A published newsletter issue as a Brevo campaign (phase D3). Brevo fills {{ contact.MANAGE_TOKEN }}
+ * per subscriber (set when they confirmed) and {{ unsubscribe }} with its own one-click link.
+ */
+export function newsletterCampaignHtml(input: {
+  siteUrl: string;
+  siteName: string;
+  issue: { title: string; slug: string; issueDate?: string; introduction?: string };
+  items: { type: string; slug: string; title: string; summary?: string }[];
+}): string {
+  const issueUrl = `${input.siteUrl}/newsletters/${input.issue.slug}`;
+  const date = input.issue.issueDate
+    ? new Date(`${input.issue.issueDate}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+    : "";
+  const items = input.items
+    .map((i) => {
+      const url = `${input.siteUrl}${PUBLICATION_PATHS[i.type] ?? ""}/${i.slug}`;
+      return `<tr><td style="padding:16px 0;border-top:1px solid #ddd9d4">
+<a href="${escape(url)}" style="font-family:Georgia,serif;font-size:19px;line-height:26px;color:#1e1e1e">${escape(i.title)}</a>
+${i.summary ? `<p style="margin:6px 0 0;font-size:14px;line-height:22px;color:#605f5c">${escape(i.summary)}</p>` : ""}
+</td></tr>`;
+    })
+    .join("\n");
+  return `<!doctype html><html><body style="margin:0;padding:24px;background:#f7f6f3;font-family:Arial,Helvetica,sans-serif;color:#1e1e1e">
+<table role="presentation" width="100%" style="max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #ddd9d4">
+<tr><td style="padding:28px 32px;border-top:4px solid #ec3e3f">
+<p style="margin:0 0 20px;font-weight:bold;font-size:18px">${escape(input.siteName)}</p>
+<h1 style="margin:0 0 6px;font-family:Georgia,serif;font-size:26px;font-weight:normal">${escape(input.issue.title)}</h1>
+${date ? `<p style="margin:0 0 16px;font-size:13px;color:#605f5c">${escape(date)}</p>` : ""}
+${input.issue.introduction ? `<p style="margin:0 0 16px;font-size:15px;line-height:24px">${escape(input.issue.introduction)}</p>` : ""}
+<table role="presentation" width="100%">${items}</table>
+<p style="margin:20px 0 0"><a href="${escape(issueUrl)}" style="color:#1e1e1e;font-weight:bold">Read this issue on our website</a></p>
+<p style="margin:28px 0 0;font-size:12px;line-height:18px;color:#605f5c">This newsletter is for general information and is not legal advice.
+<a href="${escape(input.siteUrl)}/preferences?token={{ contact.MANAGE_TOKEN }}" style="color:#605f5c">Choose your topics</a> ·
+<a href="{{ unsubscribe }}" style="color:#605f5c">Unsubscribe</a></p>
+</td></tr></table></body></html>`;
+}

@@ -21,7 +21,7 @@ const newsletterSchema = new Schema(
     /** Ordered references to publications. */
     items: { type: [itemSchema], default: [] },
     /** Brevo campaign created from this issue (phase D3). */
-    campaignId: Number,
+    campaignId: String,
     ...workflowFields,
   },
   schemaOptions,

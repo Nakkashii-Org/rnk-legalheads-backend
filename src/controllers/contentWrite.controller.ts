@@ -5,6 +5,7 @@ import { Person } from "../models/content/Person.js";
 import { Publication } from "../models/content/Publication.js";
 import { Service } from "../models/content/Service.js";
 import { Revision } from "../models/Revision.js";
+import { ReviewEvent } from "../models/ReviewEvent.js";
 import { audit } from "../services/auth.js";
 import { loadBundle } from "../services/content.js";
 import { draftProblems, reviewProblems, type FieldErrors } from "../services/contentWrite.js";
@@ -12,8 +13,8 @@ import { CONTENT_TYPES } from "./adminContent.controller.js";
 
 type Rec = Record<string, any>;
 
-/** Records in these states can't be edited yet: editing live content arrives with publishing (phase D). */
-const LOCKED = ["approved", "published", "unpublished", "archived"];
+/** Rejected records are archived; an Administrator or their creator restores them to edit again. */
+const LOCKED = ["archived"];
 
 const valuesFrom = (req: Request): Rec => {
   const v = (req.body as { values?: unknown } | undefined)?.values;
@@ -48,7 +49,7 @@ export class ContentWriteController {
     const record = await t.model.findOne({ ...t.filter, slug: req.params.id });
     if (!record) return void res.status(404).json({ error: "not_found" });
     if (LOCKED.includes(record.status))
-      return void res.status(409).json({ error: "locked", message: "Approved and published records can't be edited yet. Editing live content arrives with publishing." });
+      return void res.status(409).json({ error: "locked", message: "This record was rejected and archived. Restore it as a draft to edit it again." });
 
     const values = valuesFrom(req);
     const { doc, errors } = await draftProblems(type, values);
@@ -62,8 +63,10 @@ export class ContentWriteController {
     record.set(doc);
     if (t.filter.type === "judgment" || t.filter.type === "update")
       record.set("sourceCheckedAt", values.sourceChecked === true ? (record.sourceCheckedAt ?? new Date().toISOString().slice(0, 10)) : undefined);
-    const withdrawn = record.status === "in_review" && action === "saved";
+    const withdrawn = ["in_review", "approved"].includes(record.status) && action === "saved";
     record.status = action === "sent for review" ? "in_review" : record.status === "changes_requested" ? "changes_requested" : "draft";
+    // Approval covers one exact revision; any change needs review again. A published copy stays live meanwhile.
+    record.set("approval", undefined);
     record.updatedBy = req.user!.email;
     record.revision = (record.revision ?? 0) + 1;
     await record.save();
@@ -72,7 +75,7 @@ export class ContentWriteController {
       actorId: req.user!.id,
       actorEmail: req.user!.email,
       target: `${type}/${record.slug}`,
-      detail: `revision ${record.revision}${withdrawn ? "; withdrawn from review by the edit" : ""}`,
+      detail: `revision ${record.revision}${withdrawn ? "; review or approval withdrawn by the edit" : ""}`,
     });
     return record;
   }
@@ -108,6 +111,8 @@ export class ContentWriteController {
     const t = CONTENT_TYPES[type];
     const current = t ? await t.model.findOne({ ...t.filter, slug: req.params.id }, { status: 1 }).lean<Rec>() : null;
     if (current?.status === "in_review") return void res.status(409).json({ error: "already_in_review", message: "This record is already waiting for review." });
+    if (current?.status === "approved" || current?.status === "published")
+      return void res.status(409).json({ error: `already_${current.status}`, message: `This revision is already ${current.status}. Save a change first to send a new version for review.` });
     const record = await this.save(req, res, "sent for review");
     if (record) res.json({ id: record.slug, status: record.status, revision: record.revision });
   };
@@ -121,7 +126,7 @@ export class ContentWriteController {
     if (!record) return void res.status(404).json({ error: "not_found" });
     if (!req.user!.roles.includes("admin") && record.createdBy !== req.user!.email)
       return void res.status(403).json({ error: "forbidden", message: "Only the person who created this draft, or an Administrator, can delete it." });
-    if (!["draft", "changes_requested"].includes(record.status) || record.publishedRevisionAt)
+    if (!["draft", "changes_requested"].includes(record.status) || record.publishedRevisionAt || record.live?.data)
       return void res.status(409).json({ error: "not_a_draft", message: "Only drafts that were never published can be deleted." });
 
     // Never leave broken links behind (plan section 8).
@@ -156,8 +161,15 @@ export class ContentWriteController {
     if (!t) return void res.status(404).json({ error: "not_found" });
     const record = await t.model.findOne({ ...t.filter, slug: req.params.id }, { _id: 1 }).lean<Rec>();
     if (!record) return void res.status(404).json({ error: "not_found" });
-    const list = await Revision.find({ contentType: type, recordId: record._id }, { data: 0 }).sort({ number: -1 }).limit(50).lean<Rec[]>();
-    res.json({ revisions: list.map((r) => ({ number: r.number, action: r.action, status: r.status, savedBy: r.savedBy, savedAt: r.savedAt })) });
+    const [list, events] = await Promise.all([
+      Revision.find({ contentType: type, recordId: record._id }, { data: 0 }).sort({ number: -1 }).limit(50).lean<Rec[]>(),
+      ReviewEvent.find({ contentType: type, recordId: record._id }).sort({ at: -1 }).limit(50).lean<Rec[]>(),
+    ]);
+    res.json({
+      revisions: list.map((r) => ({ number: r.number, action: r.action, status: r.status, savedBy: r.savedBy, savedAt: r.savedAt })),
+      // Review and publishing decisions, with the reviewer's comment.
+      events: events.map((e) => ({ revision: e.revision, action: e.action, comment: e.comment, by: e.by, at: e.at })),
+    });
   };
 
   /** GET /api/admin/preview-bundle → the website's content including drafts, for signed-in staff previews. */

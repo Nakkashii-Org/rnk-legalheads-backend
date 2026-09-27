@@ -11,7 +11,7 @@ import { SiteSettings } from "../models/content/SiteSettings.js";
  * the frontend pages did not have to change. `approved` on the website means "published" here.
  */
 
-type Doc = Record<string, unknown> & { status?: string; preview?: boolean };
+type Doc = Record<string, unknown> & { status?: string; preview?: boolean; live?: { data?: Record<string, unknown> } };
 
 export type Bundle = {
   site: Record<string, unknown>;
@@ -29,14 +29,22 @@ function clean<T extends Record<string, unknown>>(record: T): T {
   return Object.fromEntries(Object.entries(record).filter(([, v]) => v !== undefined && v !== null && v !== "")) as T;
 }
 
-const approved = (d: Doc) => d.status === "published";
+/** Live on the website: it has a published copy (or was marked published before phase D kept copies). */
+const approved = (d: Doc) => d.status === "published" || Boolean(d.live?.data);
 
 /**
  * Public: published records only (never previews; never held services).
- * Draft review: every record except archived ones.
+ * Draft review and staff preview: every record except archived ones, with their latest saved text.
  */
 function filterFor(includeDrafts: boolean): Record<string, unknown> {
-  return includeDrafts ? { status: { $ne: "archived" } } : { status: "published", preview: { $ne: true } };
+  return includeDrafts
+    ? { status: { $ne: "archived" } }
+    : { $or: [{ "live.data": { $exists: true } }, { status: "published" }], preview: { $ne: true } };
+}
+
+/** The public website shows the published copy; edits saved since then stay in the CMS until published. */
+function view(d: Doc, includeDrafts: boolean): Doc {
+  return !includeDrafts && d.live?.data ? { ...d.live.data, status: "published" } : d;
 }
 
 export function serviceOut(d: Doc) {
@@ -89,16 +97,18 @@ export function publicationOut(d: Doc) {
 /** Everything the website shows, in one response (GET /api/content/bundle). */
 export async function loadBundle(includeDrafts: boolean): Promise<Bundle> {
   const filter = filterFor(includeDrafts);
-  const serviceFilter = includeDrafts ? filter : { ...filter, hold: { $ne: true } };
-  const [site, services, industries, people, jobs, publications, newsletters] = await Promise.all([
+  const [site, allServices, ...rest] = await Promise.all([
     SiteSettings.findOne({ key: "site" }).lean<Doc>(),
-    Service.find(serviceFilter).sort({ serviceId: 1 }).lean<Doc[]>(),
+    Service.find(filter).sort({ serviceId: 1 }).lean<Doc[]>(),
     Industry.find(filter).sort({ _id: 1 }).lean<Doc[]>(),
     Person.find(filter).sort({ _id: 1 }).lean<Doc[]>(),
     Job.find(filter).sort({ _id: 1 }).lean<Doc[]>(),
     Publication.find(filter).sort({ datePublished: -1, _id: 1 }).lean<Doc[]>(),
     Newsletter.find(filter).sort({ issueDate: -1, _id: 1 }).lean<Doc[]>(),
   ]);
+  const [industries, people, jobs, publications, newsletters] = rest.map((list) => list.map((d) => view(d, includeDrafts))) as Doc[][] as [Doc[], Doc[], Doc[], Doc[], Doc[]];
+  // A held service is never public, whatever its published copy says.
+  const services = allServices.map((d) => view(d, includeDrafts)).filter((d) => includeDrafts || !d.hold);
 
   const contact = (site?.contact as Record<string, unknown>) ?? {};
   return {

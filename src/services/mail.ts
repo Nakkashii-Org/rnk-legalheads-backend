@@ -23,7 +23,11 @@ export interface MailProvider {
   /** undefined when the provider has no such contact. */
   getContact(email: string): Promise<ContactState | undefined>;
   updateContact(email: string, update: { linkListIds?: number[]; unlinkListIds?: number[]; attributes?: Record<string, string> }): Promise<void>;
+  /** Creates an email campaign as a draft for these lists. Nothing is sent; a person sends it from Brevo. */
+  createCampaignDraft(input: CampaignDraft): Promise<{ id: string }>;
 }
+
+export type CampaignDraft = { name: string; subject: string; html: string; listIds: number[] };
 
 export class ProviderError extends Error {
   constructor(
@@ -110,6 +114,21 @@ export class BrevoProvider implements MailProvider {
     });
     if (!response.ok) await this.fail(response, "update contact");
   }
+
+  async createCampaignDraft(input: CampaignDraft) {
+    // No scheduledAt and no sendNow call, so Brevo keeps it as a draft.
+    const response = await this.call("POST", "/emailCampaigns", {
+      name: input.name,
+      subject: input.subject,
+      sender: { email: this.cfg.fromEmail, name: this.cfg.fromName },
+      htmlContent: input.html,
+      recipients: { listIds: input.listIds },
+    });
+    if (!response.ok) await this.fail(response, "create campaign");
+    const data = (await response.json().catch(() => ({}))) as { id?: number };
+    if (!data.id) throw new ProviderError("Brevo create campaign returned no id");
+    return { id: String(data.id) };
+  }
 }
 
 /**
@@ -151,6 +170,13 @@ export class LogProvider implements MailProvider {
     update.linkListIds?.forEach((id) => lists.add(id));
     update.unlinkListIds?.forEach((id) => lists.delete(id));
     contact.listIds = [...lists];
+  }
+
+  readonly campaigns: CampaignDraft[] = [];
+  async createCampaignDraft(input: CampaignDraft) {
+    this.campaigns.push(input);
+    logger.info("mail.log.campaign_draft", { name: input.name, subject: input.subject, lists: input.listIds.join(",") });
+    return { id: `log-campaign-${this.campaigns.length}` };
   }
 }
 
