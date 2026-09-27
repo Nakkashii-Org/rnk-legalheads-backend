@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { AdminContentController } from "../controllers/adminContent.controller.js";
 import { AuditController } from "../controllers/audit.controller.js";
 import { AuthController } from "../controllers/auth.controller.js";
 import { UsersController } from "../controllers/users.controller.js";
@@ -16,6 +17,7 @@ export function adminRoutes(deps: Deps) {
   const auth = new AuthController(deps);
   const users = new UsersController(deps);
   const auditLog = new AuditController();
+  const content = new AdminContentController();
   const router = Router();
 
   // 1. No session needed
@@ -32,6 +34,12 @@ export function adminRoutes(deps: Deps) {
   router.use("/admin", requireAuth);
   router.get("/admin/auth/me", auth.me);
   router.post("/admin/auth/logout-all", auth.logoutAll);
+  // Reading content (C1): every signed-in role
+  router.get("/admin/dashboard", content.dashboard);
+  router.get("/admin/options", content.options);
+  router.get("/admin/content", content.across);
+  router.get("/admin/content/:type", content.list);
+  router.get("/admin/content/:type/:id", content.one);
 
   // 3. Administrators only
   const admin = requireRole("admin");

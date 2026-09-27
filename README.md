@@ -158,6 +158,9 @@ Publisher and Administrator, and the server checks them on every request.
 | `GET/POST /api/admin/users`, `PATCH /users/:id`, `POST /users/:id/reset-mfa`, `/resend-invite`, `/password-reset` | Administrator | List, invite (by email through Brevo), change roles, disable or enable, reset 2-step, resend invitation, send a password reset link |
 | `GET /api/admin/reset?token=`, `POST /api/admin/reset` `{token, password, code}` | reset link | New password; needs the authenticator code too; ends all sessions; link valid 1 hour, works once |
 | `GET /api/admin/audit?page=` | Administrator | Audit log, newest first |
+| `GET /api/admin/dashboard` | signed in | Counts by status; recent drafts; new enquiries/applications (Publisher and Administrator only) |
+| `GET /api/admin/content/{type}?status=&q=`, `/content/{type}/{id}`, `/content?status=` | signed in | CMS lists, one full record, records of every type with one status (review queue) |
+| `GET /api/admin/options` | signed in | Picker choices: services by id, people by slug, publications as type:slug |
 
 **Security:**
 - Passwords are Argon2id hashes: at least 12 characters, not common, not containing the email.
@@ -207,7 +210,7 @@ and the confirm link is printed, so the whole newsletter flow can be tried local
 ## Tests
 
 ```bash
-npm test          # 68 tests; starts a throwaway in-memory MongoDB (first run downloads it)
+npm test          # 75 tests; starts a throwaway in-memory MongoDB (first run downloads it)
 npm run typecheck
 ```
 

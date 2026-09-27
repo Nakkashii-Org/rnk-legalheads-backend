@@ -56,3 +56,25 @@ export async function makeApp(env: Record<string, string> = {}) {
   const storage = new FakeStorage(await mkdtemp(path.join(tmpdir(), "rnk-test-")));
   return { app: createApp({ config, mail, storage }), mail, storage, config };
 }
+
+/** A signed-in agent (password + 6-digit code done) for a new active user with the given roles. */
+export async function signedInAgent(app: Awaited<ReturnType<typeof makeApp>>, email: string, roles: ("contributor" | "reviewer" | "publisher" | "admin")[]) {
+  const { default: request } = await import("supertest");
+  const { hashPassword, encryptSecret } = await import("../src/lib/secrets.js");
+  const { codeForStep, currentStep, newTotpSecret } = await import("../src/lib/totp.js");
+  const { User } = await import("../src/models/User.js");
+  const secret = newTotpSecret();
+  await User.create({
+    name: email.split("@")[0],
+    email,
+    roles,
+    status: "active",
+    passwordHash: await hashPassword("a long enough password"),
+    mfa: { enabled: true, secret: encryptSecret(secret, app.config.mfaEncryptionKey), lastUsedStep: -1 },
+  });
+  const agent = request.agent(app.app);
+  await agent.post("/api/admin/auth/login").set("Origin", ORIGIN).send({ email, password: "a long enough password" });
+  const res = await agent.post("/api/admin/auth/mfa").set("Origin", ORIGIN).send({ code: codeForStep(secret, currentStep()) });
+  if (res.status !== 200) throw new Error(`sign-in failed: ${res.status}`);
+  return agent;
+}
