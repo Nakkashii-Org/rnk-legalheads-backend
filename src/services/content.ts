@@ -119,6 +119,7 @@ export async function loadBundle(includeDrafts: boolean): Promise<Bundle> {
           established: site.established,
           statement: site.statement,
           disclaimer: site.disclaimer,
+          grievanceContact: site.grievanceContact,
           contactDetails: clean({ address: contact.address, phone: contact.phone, email: contact.email, mapQuery: contact.mapQuery }),
         })
       : { name: "RNK Legalheads", established: 2024, statement: "", disclaimer: "", contactDetails: {} },

@@ -12,6 +12,8 @@ const siteSettingsSchema = new Schema(
     established: { type: Number, required: true },
     statement: { type: String, required: true },
     disclaimer: { type: String, required: true },
+    /** Name or designation of the grievance / privacy contact shown in the Privacy Policy. */
+    grievanceContact: String,
     contact: {
       address: String,
       phone: String,

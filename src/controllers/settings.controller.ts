@@ -18,6 +18,7 @@ const FIELDS: Record<string, [string, number, boolean]> = {
   phone: ["Telephone", 20, false],
   email: ["Enquiry email", 120, true],
   mapQuery: ["Map location", 200, false],
+  grievanceContact: ["Grievance / privacy contact", 160, false],
 };
 
 const view = (s: Rec | null) => ({
@@ -30,6 +31,7 @@ const view = (s: Rec | null) => ({
   phone: s?.contact?.phone ?? "",
   email: s?.contact?.email ?? "",
   mapQuery: s?.contact?.mapQuery ?? "",
+  grievanceContact: s?.grievanceContact ?? "",
   updatedAt: s?.updatedAt,
 });
 
@@ -69,8 +71,11 @@ export class SettingsController {
           established: year,
           statement: values.statement,
           disclaimer: values.disclaimer,
+          ...(values.grievanceContact && { grievanceContact: values.grievanceContact }),
           contact: { address: values.address, phone: values.phone || undefined, email: values.email, mapQuery: values.mapQuery || undefined },
         },
+        // An emptied optional field is removed, not left with its old value.
+        ...(!values.grievanceContact && { $unset: { grievanceContact: 1 } }),
       },
       { upsert: true },
     );

@@ -146,6 +146,7 @@ describe("Site settings (C5)", () => {
     phone: "+91 11 1234 5678",
     email: "contact@rnklegalheads.com",
     mapQuery: "RNK Legalheads New Delhi",
+    grievanceContact: "Data Protection Officer",
   };
 
   it("Administrators only", async () => {
@@ -169,5 +170,10 @@ describe("Site settings (C5)", () => {
     expect(bundle.body.site).toMatchObject({ statement: valid.statement, contactDetails: { phone: valid.phone, address: valid.address } });
     const event = await AuditEvent.findOne({ action: "settings.updated" }).lean();
     expect(event?.detail).toContain("statement");
+    expect(bundle.body.site.grievanceContact).toBe("Data Protection Officer");
+
+    // Emptying an optional field removes it.
+    await admin.patch("/api/admin/settings").send({ ...valid, grievanceContact: "" }).expect(200);
+    expect((await SiteSettings.findOne({ key: "site" }).lean())?.grievanceContact).toBeUndefined();
   });
 });
