@@ -176,4 +176,23 @@ describe("Site settings (C5)", () => {
     await admin.patch("/api/admin/settings").send({ ...valid, grievanceContact: "" }).expect(200);
     expect((await SiteSettings.findOne({ key: "site" }).lean())?.grievanceContact).toBeUndefined();
   });
+
+  it("takes up to 3 telephone numbers, each checked, shown as 'number 1 | number 2 | number 3'", async () => {
+    const app = await makeApp();
+    const admin = await signedInAgent(app, "admin@example.com", ["admin"]);
+    const save = (phone: string) => admin.patch("/api/admin/settings").send({ ...valid, phone });
+
+    expect((await save("+91 97792 02789 | +91 60034 16196 | 011 2345 6789 | +91 99999 00000")).body.errors.phone).toMatch(/no more than 3/);
+    expect((await save("+91 97792 02789 | call me")).body.errors.phone).toMatch(/each telephone number/i);
+    expect((await save("+91 97792 02789 | +919779202789")).body.errors.phone).toMatch(/only once/);
+
+    const res = await save(" +91 97792 02789|+91 60034 16196 |011 2345 6789 ").expect(200);
+    expect(res.body.settings.phone).toBe("+91 97792 02789 | +91 60034 16196 | 011 2345 6789");
+    const bundle = await request(app.app).get("/api/content/bundle");
+    expect(bundle.body.site.contactDetails.phone).toBe("+91 97792 02789 | +91 60034 16196 | 011 2345 6789");
+
+    // Removing every number removes the field from the website.
+    await save("").expect(200);
+    expect((await request(app.app).get("/api/content/bundle")).body.site.contactDetails.phone).toBeUndefined();
+  });
 });

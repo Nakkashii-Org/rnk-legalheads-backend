@@ -6,6 +6,15 @@ type Rec = Record<string, any>;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE = /^\+?[0-9 ()-]{7,20}$/;
+/** Up to this many telephone numbers, stored in one field as "number 1 | number 2 | number 3". */
+export const MAX_PHONES = 3;
+
+/** Splits the stored or submitted telephone text into its numbers. */
+const splitPhones = (value: string) =>
+  value
+    .split("|")
+    .map((p) => p.trim())
+    .filter(Boolean);
 
 /** Editable firm facts: field → [label, max length, required]. API keys and passwords never belong here. */
 const FIELDS: Record<string, [string, number, boolean]> = {
@@ -15,7 +24,7 @@ const FIELDS: Record<string, [string, number, boolean]> = {
   statement: ["Footer statement", 300, true],
   disclaimer: ["Footer disclaimer", 600, true],
   address: ["Office address", 400, true],
-  phone: ["Telephone", 20, false],
+  phone: ["Telephone", 80, false],
   email: ["Enquiry email", 120, true],
   mapQuery: ["Map location", 200, false],
   grievanceContact: ["Grievance / privacy contact", 160, false],
@@ -57,7 +66,14 @@ export class SettingsController {
     if (!errors.established && !(/^\d{4}$/.test(values.established!) && year >= 1900 && year <= new Date().getFullYear()))
       errors.established = "Enter a four-digit year, not in the future.";
     if (!errors.email && !EMAIL.test(values.email!)) errors.email = "Enter a valid email address.";
-    if (values.phone && !errors.phone && !PHONE.test(values.phone)) errors.phone = "Enter a telephone number with digits only (spaces, +, brackets and - allowed).";
+    if (values.phone && !errors.phone) {
+      const phones = splitPhones(values.phone);
+      if (phones.length > MAX_PHONES) errors.phone = `Add no more than ${MAX_PHONES} telephone numbers.`;
+      else if (phones.some((p) => !PHONE.test(p))) errors.phone = "Enter each telephone number with digits only (spaces, +, brackets and - allowed).";
+      else if (new Set(phones.map((p) => p.replace(/[^\d+]/g, ""))).size !== phones.length) errors.phone = "Each telephone number can be added only once.";
+      // Stored in the one format the website shows: "number 1 | number 2 | number 3".
+      else values.phone = phones.join(" | ");
+    }
     if (Object.keys(errors).length) return void res.status(422).json({ errors });
 
     const before = view(await SiteSettings.findOne({ key: "site" }).lean<Rec>());
