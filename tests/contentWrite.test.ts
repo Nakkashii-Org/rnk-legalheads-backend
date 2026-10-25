@@ -176,6 +176,15 @@ describe("CMS writing (C2)", () => {
     expect(s.body.errors.scope).toBe("A service needs exactly 6 work areas.");
   });
 
+  it("a service can be put in the International Counsel Support group; unknown groups are refused", async () => {
+    const app = await makeApp();
+    const agent = await signedInAgent(app, "admin@example.com", ["admin"]);
+    const save = (group: string) => agent.patch("/api/admin/content/services/arbitration").send({ values: { title: "Arbitration", slug: "arbitration", group } });
+    expect((await save("international")).status).toBe(200);
+    expect((await Service.findOne({ slug: "arbitration" }).lean())?.group).toBe("international");
+    expect((await save("crypto")).body.errors.group).toBe("Choose a service group.");
+  });
+
   it("rejected (archived) records can't be edited until restored", async () => {
     const app = await makeApp();
     const agent = await signedInAgent(app, "admin@example.com", ["admin"]);

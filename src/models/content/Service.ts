@@ -1,7 +1,7 @@
 import { Schema, model, type InferSchemaType } from "mongoose";
 import { schemaOptions, slugField, workAreaSchema, workflowFields } from "./common.js";
 
-export const SERVICE_GROUPS = ["business", "disputes", "tax", "property", "ip", "people", "regulated"] as const;
+export const SERVICE_GROUPS = ["business", "disputes", "tax", "property", "ip", "people", "regulated", "international"] as const;
 
 /** Service record (guide p.150): directory card plus the service page content. */
 const serviceSchema = new Schema(

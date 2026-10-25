@@ -34,6 +34,13 @@ describe("newsletter", () => {
     expect(stored?.consentAt).toBeInstanceOf(Date);
   });
 
+  it("accepts the International Counsel Support topic and subscribes to its own list", async () => {
+    const { app, mail } = await makeApp();
+    expect((await subscribe(app, { topics: ["international"] })).status).toBe(202);
+    // Development numbering: the eighth topic gets list 8.
+    expect(mail.optIns[0]!.listIds).toEqual([8]);
+  });
+
   it("validates like the frontend", async () => {
     const { app } = await makeApp();
     const res = await subscribe(app, { email: "nope", topics: ["crypto"], consent: false });

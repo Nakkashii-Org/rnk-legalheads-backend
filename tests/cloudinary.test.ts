@@ -81,7 +81,7 @@ describe("CloudinaryStorage", () => {
 });
 
 describe("config: cloudinary", () => {
-  const base = { NODE_ENV: "production", PUBLIC_SITE_URL: "https://rnk.example", MONGODB_URI: "mongodb://x", CONTACT_DESTINATION: "c@x.com", MAIL_TRANSPORT: "brevo", BREVO_API_KEY: "xkeysib-x", MAIL_FROM_EMAIL: "w@x.com", NEWSLETTER_LIST_IDS: '{"business":3,"disputes":4,"tax":5,"property":6,"ip":7,"people":8,"regulated":9}', DOI_TEMPLATE_ID: "2", MFA_ENCRYPTION_KEY: Buffer.alloc(32, 7).toString("base64") };
+  const base = { NODE_ENV: "production", PUBLIC_SITE_URL: "https://rnk.example", MONGODB_URI: "mongodb://x", CONTACT_DESTINATION: "c@x.com", MAIL_TRANSPORT: "brevo", BREVO_API_KEY: "xkeysib-x", MAIL_FROM_EMAIL: "w@x.com", NEWSLETTER_LIST_IDS: '{"business":3,"disputes":4,"tax":5,"property":6,"ip":7,"people":8,"regulated":9,"international":10}', DOI_TEMPLATE_ID: "2", MFA_ENCRYPTION_KEY: Buffer.alloc(32, 7).toString("base64") };
 
   it("reads CLOUDINARY_URL and is allowed in production", () => {
     const config = loadConfig({ ...base, STORAGE_DRIVER: "cloudinary", CLOUDINARY_URL: "cloudinary://123456789:abc-DEF_ghi@rnk-legalheads" });
@@ -92,5 +92,12 @@ describe("config: cloudinary", () => {
   it("explains a missing or malformed CLOUDINARY_URL", () => {
     expect(() => loadConfig({ ...base, STORAGE_DRIVER: "cloudinary" })).toThrow(/CLOUDINARY_URL is required/);
     expect(() => loadConfig({ ...base, STORAGE_DRIVER: "cloudinary", CLOUDINARY_URL: "https://wrong" })).toThrow(/cloudinary:\/\//);
+  });
+
+  it("needs a Brevo list for every newsletter topic, including International Counsel Support", () => {
+    const withCloudinary = { ...base, STORAGE_DRIVER: "cloudinary", CLOUDINARY_URL: "cloudinary://1:a@rnk" };
+    expect(loadConfig(withCloudinary).newsletter.listIds.international).toBe(10);
+    const without = JSON.stringify({ business: 3, disputes: 4, tax: 5, property: 6, ip: 7, people: 8, regulated: 9 });
+    expect(() => loadConfig({ ...withCloudinary, NEWSLETTER_LIST_IDS: without })).toThrow(/missing a list id for "international"/);
   });
 });

@@ -1,6 +1,6 @@
 import { Person } from "../models/content/Person.js";
 import { Publication } from "../models/content/Publication.js";
-import { Service } from "../models/content/Service.js";
+import { Service, SERVICE_GROUPS } from "../models/content/Service.js";
 import { Media } from "../models/Media.js";
 
 /**
@@ -329,7 +329,7 @@ export const RULES: Record<string, TypeRules> = {
       const summary = str(v.summary);
       checkLength(summary, 200, "summary", "Summary", errors);
       const group = str(v.group);
-      if (group && !["business", "disputes", "tax", "property", "ip", "people", "regulated"].includes(group)) errors.group = "Choose a service group.";
+      if (group && !(SERVICE_GROUPS as readonly string[]).includes(group)) errors.group = "Choose a service group.";
       const related = strList(v.related);
       if (related.length > 3) errors.related = "Choose up to 3 related services.";
       await checkServices(related, "related", errors);

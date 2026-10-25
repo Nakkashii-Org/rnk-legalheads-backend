@@ -38,7 +38,7 @@ export type Config = {
   };
 };
 
-export const NEWSLETTER_TOPIC_IDS = ["business", "disputes", "tax", "property", "ip", "people", "regulated"] as const;
+export const NEWSLETTER_TOPIC_IDS = ["business", "disputes", "tax", "property", "ip", "people", "regulated", "international"] as const;
 
 export class ConfigError extends Error {}
 

@@ -109,7 +109,7 @@ include message bodies, resumes or tokens.
 1. Verify the sender address → `MAIL_FROM_EMAIL`; at launch, verify the domain `rnklegalheads.com` (Brevo code, DKIM, SPF and DMARC DNS records).
 2. Create an **API** key (not SMTP) → `BREVO_API_KEY`, `MAIL_TRANSPORT=brevo`.
 3. Security → Authorised IPs: deactivate IP blocking (Render has no fixed IP).
-4. Create 7 lists (Business, Disputes, Tax, Property, IP, People, Regulated) → `NEWSLETTER_LIST_IDS`.
+4. Create 8 lists (Business, Disputes, Tax, Property, IP, People, Regulated, International) → `NEWSLETTER_LIST_IDS`, one key per topic: `business`, `disputes`, `tax`, `property`, `ip`, `people`, `regulated`, `international`. The backend refuses to start if a key is missing.
 5. Create a double opt-in confirmation template → `DOI_TEMPLATE_ID`.
 6. Create the contact attribute `MANAGE_TOKEN` (text).
 7. Settings → Webhooks → Create outbound webhook: `https://<backend>/api/webhooks/brevo?token=<BREVO_WEBHOOK_SECRET>`, event category **Marketing email**, only **Hard Bounced, Complaint, Unsubscribed** on. Set `BREVO_WEBHOOK_SECRET` on Render and redeploy.
