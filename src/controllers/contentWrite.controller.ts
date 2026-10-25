@@ -11,6 +11,40 @@ import { loadBundle } from "../services/content.js";
 import { draftProblems, reviewProblems, type FieldErrors } from "../services/contentWrite.js";
 import { CONTENT_TYPES } from "./adminContent.controller.js";
 
+/** A record that links to the one being deleted, and the field the link sits in. */
+export type Link = { kind: string; title: string; slug: string; field: string };
+
+const PUBLICATION_KIND: Record<string, string> = { article: "Article", judgment: "Judgment", update: "Legal update" };
+
+/** Every record that links to this one, named so the editor can find and remove each link. */
+async function linksTo(type: string, record: Rec, publicationType?: string): Promise<Link[]> {
+  const pick = { slug: 1, title: 1, name: 1, type: 1 };
+  const as = (kind: string | ((r: Rec) => string), field: string) => (rows: Rec[]) =>
+    rows.map((r) => ({ kind: typeof kind === "string" ? kind : kind(r), title: r.title ?? r.name ?? r.slug, slug: r.slug, field }));
+  const publicationKind = (r: Rec) => PUBLICATION_KIND[r.type] ?? "Publication";
+
+  if (type === "services") {
+    const id = record.serviceId;
+    return [
+      ...as("Service", "Related services")(await Service.find({ related: id }, pick).lean<Rec[]>()),
+      ...as("Industry", "Services")(await Industry.find({ serviceIds: id }, pick).lean<Rec[]>()),
+      ...as("Person", "Services")(await Person.find({ serviceIds: id }, pick).lean<Rec[]>()),
+      ...as(publicationKind, "Related services")(await Publication.find({ serviceIds: id }, pick).lean<Rec[]>()),
+    ];
+  }
+  if (type === "people")
+    return [
+      ...as(publicationKind, "Author")(await Publication.find({ "author.personSlug": record.slug }, pick).lean<Rec[]>()),
+      ...as("Service", "Lawyers for this service")(await Service.find({ people: record.slug }, pick).lean<Rec[]>()),
+      ...as("Industry", "People")(await Industry.find({ people: record.slug }, pick).lean<Rec[]>()),
+    ];
+  if (publicationType)
+    return as("Newsletter", "Publications in this issue")(
+      await Newsletter.find({ items: { $elemMatch: { type: publicationType, slug: record.slug } } }, pick).lean<Rec[]>(),
+    );
+  return [];
+}
+
 type Rec = Record<string, any>;
 
 /** Rejected records are archived; an Administrator or their creator restores them to edit again. */
@@ -129,25 +163,17 @@ export class ContentWriteController {
     if (!["draft", "changes_requested"].includes(record.status) || record.publishedRevisionAt || record.live?.data)
       return void res.status(409).json({ error: "not_a_draft", message: "Only drafts that were never published can be deleted." });
 
-    // Never leave broken links behind (plan section 8).
-    let usedBy = 0;
-    if (type === "services") {
-      const id = record.serviceId;
-      usedBy =
-        (await Service.countDocuments({ related: id })) +
-        (await Industry.countDocuments({ serviceIds: id })) +
-        (await Person.countDocuments({ serviceIds: id })) +
-        (await Publication.countDocuments({ serviceIds: id }));
-    } else if (type === "people") {
-      usedBy =
-        (await Publication.countDocuments({ "author.personSlug": record.slug })) +
-        (await Service.countDocuments({ people: record.slug })) +
-        (await Industry.countDocuments({ people: record.slug }));
-    } else if (t.filter.type) {
-      usedBy = await Newsletter.countDocuments({ items: { $elemMatch: { type: t.filter.type, slug: record.slug } } });
-    }
-    if (usedBy > 0)
-      return void res.status(409).json({ error: "in_use", message: `This draft is linked from ${usedBy} other record${usedBy === 1 ? "" : "s"}. Remove those links first.` });
+    // Never leave broken links behind (plan section 8). Each linking record is named, with the
+    // place to remove the link, so the editor knows exactly what to change.
+    const links = await linksTo(type, record, t.filter.type);
+    if (links.length > 0)
+      return void res.status(409).json({
+        error: "in_use",
+        links,
+        message: `This draft can't be deleted because it is linked from: ${links
+          .map((l) => `${l.title} (${l.kind}, in ${l.field})`)
+          .join("; ")}. Remove those links, save each record, then delete this draft.`,
+      });
 
     await record.deleteOne();
     await audit("content.deleted", { actorId: req.user!.id, actorEmail: req.user!.email, target: `${type}/${record.slug}` });

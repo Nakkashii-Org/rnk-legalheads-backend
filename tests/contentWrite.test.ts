@@ -3,6 +3,8 @@ import request from "supertest";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { AuditEvent } from "../src/models/AuditEvent.js";
 import { Revision } from "../src/models/Revision.js";
+import { Industry } from "../src/models/content/Industry.js";
+import { Person } from "../src/models/content/Person.js";
 import { Publication } from "../src/models/content/Publication.js";
 import { Service } from "../src/models/content/Service.js";
 import { seedContent } from "../src/scripts/seed-content.js";
@@ -198,6 +200,21 @@ describe("CMS writing (C2)", () => {
     const linked = await admin.delete("/api/admin/content/services/arbitration");
     expect(linked.status).toBe(409);
     expect(linked.body.error).toBe("in_use");
+    // Each linking record is named, with the field to change.
+    const linkers = await Service.find({ related: "S10" }, { title: 1 }).lean();
+    expect(linkers.length).toBeGreaterThan(0);
+    for (const s of linkers) {
+      expect(linked.body.links).toContainEqual(expect.objectContaining({ kind: "Service", title: s.title, field: "Related services" }));
+      expect(linked.body.message).toContain(`${s.title} (Service, in Related services)`);
+    }
+    expect(linked.body.message).toMatch(/^This draft can't be deleted because it is linked from: .+ Remove those links, save each record, then delete this draft\.$/);
+
+    // Once every link is removed, the draft can be deleted.
+    await Service.updateMany({ related: "S10" }, { $pull: { related: "S10" } });
+    await Industry.updateMany({ serviceIds: "S10" }, { $pull: { serviceIds: "S10" } });
+    await Person.updateMany({ serviceIds: "S10" }, { $pull: { serviceIds: "S10" } });
+    await Publication.updateMany({ serviceIds: "S10" }, { $pull: { serviceIds: "S10" } });
+    expect((await admin.delete("/api/admin/content/services/arbitration")).body).toEqual({ ok: true });
 
     await Publication.updateOne({ type: "article" }, { status: "published" });
     expect((await admin.delete("/api/admin/content/articles/preparing-for-a-commercial-transaction")).body.error).toBe("not_a_draft");
